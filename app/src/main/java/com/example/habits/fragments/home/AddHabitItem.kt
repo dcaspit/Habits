@@ -3,6 +3,7 @@ package com.example.habits.fragments.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habits.databinding.AddHabitItemBinding
 import com.example.habits.databinding.HabitItemBinding
 import com.example.habits.fragments.baseObjects.BaseItem
 
@@ -13,15 +14,15 @@ class AddHabitItem: BaseItem() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder) {
-            holder.bind(position)
+            holder.bind()
         }
     }
 
     class ViewHolder(
-        private val binding: HabitItemBinding
+        private val binding: AddHabitItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int) {
-            binding.text.text = "Add Habit" + position
+        fun bind() {
+            binding.text.text = "Add Habit"
         }
     }
 
@@ -29,7 +30,7 @@ class AddHabitItem: BaseItem() {
         fun create(
             parent: ViewGroup
         ): RecyclerView.ViewHolder {
-            val binding = HabitItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding = AddHabitItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(binding)
         }
     }

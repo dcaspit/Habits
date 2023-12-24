@@ -23,12 +23,10 @@ class HomeFragment: Fragment() {
             _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
             binding.lifecycleOwner = viewLifecycleOwner
             binding.recyclerView.adapter = BaseRecyclerAdapter(arrayListOf(
-                HabitItem(),
-                HabitItem(),
-                HabitItem(),
-                HabitItem(),
-                HabitItem(),
-                HabitItem(),
+                HabitItem("Medidation", HabitIntervals.EVERYDAY),
+                HabitItem("Medidation", HabitIntervals.EVERYDAY),
+                HabitItem("Medidation", HabitIntervals.EVERYDAY),
+                HabitItem("Medidation", HabitIntervals.EVERYDAY),
                 AddHabitItem()
             ))
             binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
