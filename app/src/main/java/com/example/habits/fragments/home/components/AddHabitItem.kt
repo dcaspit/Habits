@@ -1,10 +1,9 @@
-package com.example.habits.fragments.home
+package com.example.habits.fragments.home.components
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.databinding.AddHabitItemBinding
-import com.example.habits.databinding.HabitItemBinding
 import com.example.habits.fragments.baseObjects.BaseItem
 
 class AddHabitItem: BaseItem() {

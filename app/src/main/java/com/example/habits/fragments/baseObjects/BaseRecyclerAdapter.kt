@@ -2,8 +2,8 @@ package com.example.habits.fragments.baseObjects
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habits.fragments.home.AddHabitItem
-import com.example.habits.fragments.home.HabitItem
+import com.example.habits.fragments.home.components.AddHabitItem
+import com.example.habits.fragments.home.components.HabitItem
 
 class BaseRecyclerAdapter(
     val list: ArrayList<BaseItem>
