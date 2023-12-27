@@ -1,11 +1,11 @@
 package com.example.habits.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.habits.fragments.home.adapters.HabitDateData
+import com.example.habits.models.HabitDate
 
 class HabitDataDiffUtils(
-    private val oldList: List<HabitDateData>,
-    private val newList: List<HabitDateData>
+    private val oldList: List<HabitDate>,
+    private val newList: List<HabitDate>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 

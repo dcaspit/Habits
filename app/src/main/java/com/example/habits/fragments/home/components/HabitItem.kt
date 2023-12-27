@@ -2,13 +2,15 @@ package com.example.habits.fragments.home.components
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.habits.databinding.HabitItemBinding
-import com.example.habits.fragments.baseObjects.BaseItem
-import com.example.habits.fragments.home.adapters.HabitDateData
+import com.example.habits.fragments.home.HomeFragmentDirections
+import com.example.habits.utils.baseObjects.BaseItem
 import com.example.habits.fragments.home.adapters.HabitItemHorizontalRecyclerAdapter
+import com.example.habits.models.Habit
+import com.example.habits.models.HabitDate
 
 class HabitItem(
     private val habitName: String,
@@ -33,26 +35,26 @@ class HabitItem(
             binding.habitInterval.text = habitInterval.name
             val recyclerView = binding.calendar
             adapter.setData(listOf(
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
-                HabitDateData("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
+                HabitDate("Sun", "14"),
             ))
             recyclerView.adapter = adapter
             val horizonatalLayoutManager = LinearLayoutManager(
@@ -60,6 +62,15 @@ class HabitItem(
                 LinearLayoutManager.HORIZONTAL, false
             )
             recyclerView.layoutManager = horizonatalLayoutManager
+            binding.root.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomePageToDetailsPage(Habit(
+                    1,
+                    habitName,
+                    habitInterval,
+                    HabitDate("Sun", "14"),
+                ))
+                binding.root.findNavController().navigate(action)
+            }
         }
     }
 

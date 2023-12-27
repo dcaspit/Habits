@@ -1,4 +1,4 @@
-package com.example.habits.fragments.baseObjects
+package com.example.habits.utils.baseObjects
 
 import androidx.recyclerview.widget.RecyclerView
 

@@ -5,16 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.databinding.DateItemBinding
+import com.example.habits.models.HabitDate
 import com.example.habits.utils.HabitDataDiffUtils
 
 class HabitItemHorizontalRecyclerAdapter: RecyclerView.Adapter<HabitItemHorizontalRecyclerAdapter.HabitDateViewHolder>() {
 
-    private var dateList = emptyList<HabitDateData>()
+    private var dateList = emptyList<HabitDate>()
 
     class HabitDateViewHolder(
         val binding: DateItemBinding
     ): RecyclerView.ViewHolder(binding.root) {
-        fun bind(habitDateData: HabitDateData) {
+        fun bind(habitDateData: HabitDate) {
             binding.dayName.text = habitDateData.day
             binding.dayNum.text = habitDateData.num
         }
@@ -36,15 +37,10 @@ class HabitItemHorizontalRecyclerAdapter: RecyclerView.Adapter<HabitItemHorizont
         holder.bind(currentItem)
     }
 
-    fun setData(habitData: List<HabitDateData>){
+    fun setData(habitData: List<HabitDate>){
         val jsonMovieDiffUtil = HabitDataDiffUtils(dateList, habitData)
         val movieDiffResult = DiffUtil.calculateDiff(jsonMovieDiffUtil)
         this.dateList = habitData
         movieDiffResult.dispatchUpdatesTo(this)
     }
 }
-
-data class HabitDateData(
-    val day: String,
-    val num: String
-)

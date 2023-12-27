@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.habits.databinding.FragmentHomeBinding
-import com.example.habits.fragments.baseObjects.BaseRecyclerAdapter
+import com.example.habits.utils.baseObjects.BaseRecyclerAdapter
 import com.example.habits.fragments.home.components.AddHabitItem
 import com.example.habits.fragments.home.components.HabitIntervals
 import com.example.habits.fragments.home.components.HabitItem

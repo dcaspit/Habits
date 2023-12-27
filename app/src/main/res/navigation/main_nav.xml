@@ -8,6 +8,21 @@
         android:id="@+id/homePage"
         android:name="com.example.habits.fragments.home.HomeFragment"
         android:label="HomePage"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homePage_to_detailsPage"
+            app:destination="@id/habitDetails"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/habitDetails"
+        android:name="com.example.habits.fragments.details.HabitDetails"
+        android:label="habitDetails"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="habitData"
+            app:argType="com.example.habits.models.Habit" />
     </fragment>
 </navigation>

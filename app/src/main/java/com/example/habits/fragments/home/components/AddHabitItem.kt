@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.databinding.AddHabitItemBinding
-import com.example.habits.fragments.baseObjects.BaseItem
+import com.example.habits.utils.baseObjects.BaseItem
 
 class AddHabitItem: BaseItem() {
 
