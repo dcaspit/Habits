@@ -1,4 +1,4 @@
-package com.example.habits.fragments.home.components
+package com.example.habits.data.models
 
 enum class HabitIntervals {
     EVERYDAY,

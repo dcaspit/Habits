@@ -1,12 +1,11 @@
-package com.example.habits.utils.baseObjects
+package com.example.habits.data.baseObjects
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habits.fragments.home.components.AddHabitItem
+import com.example.habits.fragments.home.components.HabitAddItem
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.BaseItemDiffUtils
-import com.example.habits.utils.HabitDataDiffUtils
 
 class BaseRecyclerAdapter(
     private var list: ArrayList<BaseItem>
@@ -16,7 +15,7 @@ class BaseRecyclerAdapter(
         if(viewType == BaseItem.HABIT) {
             return HabitItem.create(parent)
         }
-        return AddHabitItem.create(parent)
+        return HabitAddItem.create(parent)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

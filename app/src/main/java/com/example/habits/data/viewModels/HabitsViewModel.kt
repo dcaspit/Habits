@@ -5,19 +5,17 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habits.fragments.home.components.HabitIntervals
-import com.example.habits.models.Habit
-import com.example.habits.models.HabitDate
+import com.example.habits.data.models.HabitIntervals
+import com.example.habits.data.models.HabitData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HabitsViewModel(application: Application): AndroidViewModel(application) {
 
-    private var _habits = MutableLiveData<List<Habit>>(listOf())
-    val habits: LiveData<List<Habit>>
+    private var _habits = MutableLiveData<List<HabitData>>(listOf())
+    val habits: LiveData<List<HabitData>>
         get() = _habits
 
 
@@ -26,9 +24,9 @@ class HabitsViewModel(application: Application): AndroidViewModel(application) {
             try{
                 delay(200)
                 if(_habits.value?.size == 0) {
-                    _habits.postValue(
-                        getHabits()
-                    )
+//                    _habits.postValue(
+//                        //getHabits()
+//                    )
                 }
             }catch (e: Exception) {
                 Log.d("ERROR", e.stackTraceToString())
@@ -36,16 +34,9 @@ class HabitsViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun getHabit(id: Int): HabitData? = _habits.value?.find { habit -> habit.id == id }
+
     companion object {
-        fun getHabits(): List<Habit> {
-            return listOf(
-                Habit(1, "Meditation", HabitIntervals.EVERYDAY, HabitDate("SUN", "12")),
-                Habit(1, "Meditation", HabitIntervals.EVERYDAY, HabitDate("SUN", "12")),
-                Habit(1, "Meditation", HabitIntervals.EVERYDAY, HabitDate("SUN", "12")),
-                Habit(1, "Meditation", HabitIntervals.EVERYDAY, HabitDate("SUN", "12")),
-                Habit(1, "Meditation", HabitIntervals.EVERYDAY, HabitDate("SUN", "12")),
-            )
-        }
     }
 
 }

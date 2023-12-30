@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habits.data.models.HabitDate
 import com.example.habits.databinding.DateItemBinding
-import com.example.habits.models.HabitDate
 import com.example.habits.utils.HabitDataDiffUtils
 
 class HabitItemHorizontalRecyclerAdapter: RecyclerView.Adapter<HabitItemHorizontalRecyclerAdapter.HabitDateViewHolder>() {
@@ -17,7 +17,7 @@ class HabitItemHorizontalRecyclerAdapter: RecyclerView.Adapter<HabitItemHorizont
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind(habitDateData: HabitDate) {
             binding.dayName.text = habitDateData.day
-            binding.dayNum.text = habitDateData.num
+            binding.dayNum.text = habitDateData.num.toString()
         }
 
         companion object {

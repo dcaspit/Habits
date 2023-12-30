@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Habits</string>
+    <string name="frequency">Frequency</string>
+    <string name="times_a_week">Times a week</string>
+    <string name="reminder">Reminder</string>
+    <string name="just_notification">Just notification</string>
+    <string name="add">add</string>
 </resources>

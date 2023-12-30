@@ -10,19 +10,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.habits.data.viewModels.HabitsViewModel
 import com.example.habits.databinding.FragmentHomeBinding
-import com.example.habits.utils.baseObjects.BaseRecyclerAdapter
-import com.example.habits.fragments.home.components.AddHabitItem
-import com.example.habits.fragments.home.components.HabitIntervals
+import com.example.habits.fragments.home.components.HabitAddItem
+import com.example.habits.data.baseObjects.BaseRecyclerAdapter
 import com.example.habits.fragments.home.components.HabitItem
+import com.example.habits.data.baseObjects.BaseItem
+import com.example.habits.data.viewModels.DatabaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    private val habitsViewModel: HabitsViewModel by viewModels()
+    private val mDatabaseViewModel: DatabaseViewModel by viewModels()
 
     private val binding get() = _binding!!
     private var _binding: FragmentHomeBinding? = null
+
+    private val baseRecyclerAdapter: BaseRecyclerAdapter by lazy { BaseRecyclerAdapter(arrayListOf()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,14 +34,14 @@ class HomeFragment : Fragment() {
         try {
             _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
             binding.lifecycleOwner = viewLifecycleOwner
-            binding.recyclerView.adapter = BaseRecyclerAdapter(arrayListOf())
+            binding.recyclerView.adapter = baseRecyclerAdapter
             binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
 
-            habitsViewModel.habits.observe(viewLifecycleOwner) {
-                val adapter = binding.recyclerView.adapter
-                if (adapter != null && adapter is BaseRecyclerAdapter) {
-                    adapter.setData(it.map { habit -> HabitItem(habit.title, habit.interval) })
-                }
+            mDatabaseViewModel.getAllHabits.observe(viewLifecycleOwner) {
+                val items: List<BaseItem> = it.map { habit -> HabitItem(habit) }
+                val updatedItems = items + HabitAddItem()
+                baseRecyclerAdapter.setData(updatedItems)
+                binding.recyclerView.scheduleLayoutAnimation()
             }
 
             return binding.root
@@ -46,13 +49,6 @@ class HomeFragment : Fragment() {
             e.printStackTrace()
         }
         return null;
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO) {
-            habitsViewModel.fetchHabits()
-        }
     }
 
     override fun onDestroyView() {

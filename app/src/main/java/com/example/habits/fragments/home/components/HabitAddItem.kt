@@ -2,11 +2,13 @@ package com.example.habits.fragments.home.components
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.databinding.AddHabitItemBinding
-import com.example.habits.utils.baseObjects.BaseItem
+import com.example.habits.data.baseObjects.BaseItem
+import com.example.habits.fragments.home.HomeFragmentDirections
 
-class AddHabitItem: BaseItem() {
+class HabitAddItem: BaseItem() {
 
     override val viewType: Int
         get() = ADD_HABIT
@@ -22,6 +24,12 @@ class AddHabitItem: BaseItem() {
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             binding.text.text = "Add Habit"
+
+            binding.root.setOnClickListener {
+                val action =  HomeFragmentDirections.actionHomePageToAddFragment()
+                binding.root.findNavController().navigate(action)
+
+            }
         }
     }
 

@@ -7,21 +7,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.databinding.HabitItemBinding
 import com.example.habits.fragments.home.HomeFragmentDirections
-import com.example.habits.utils.baseObjects.BaseItem
+import com.example.habits.data.baseObjects.BaseItem
 import com.example.habits.fragments.home.adapters.HabitItemHorizontalRecyclerAdapter
-import com.example.habits.models.Habit
-import com.example.habits.models.HabitDate
+import com.example.habits.data.models.HabitData
+import com.example.habits.data.models.HabitDate
+import com.example.habits.data.models.HabitIntervals
 
 class HabitItem(
-    private val habitName: String,
-    private val habitInterval: HabitIntervals
+    private val habitData: HabitData,
 ) : BaseItem() {
 
     override val viewType: Int = HABIT
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(holder is ViewHolder) {
-            holder.bind(habitName, habitInterval)
+            holder.bind(habitData)
         }
     }
 
@@ -30,9 +30,9 @@ class HabitItem(
     ): RecyclerView.ViewHolder(binding.root) {
 
         private val adapter: HabitItemHorizontalRecyclerAdapter by lazy { HabitItemHorizontalRecyclerAdapter() }
-        fun bind(habitName: String, habitInterval: HabitIntervals) {
-            binding.habitName.text = habitName
-            binding.habitInterval.text = habitInterval.name
+        fun bind(habitData: HabitData) {
+            binding.habitName.text = habitData.title
+            binding.habitInterval.text = HabitIntervals.values().find { it.ordinal == habitData.interval }?.name ?: ""
             val recyclerView = binding.calendar
             adapter.setData(listOf(
                 HabitDate("Sun", "14"),
@@ -63,13 +63,12 @@ class HabitItem(
             )
             recyclerView.layoutManager = horizonatalLayoutManager
             binding.root.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomePageToDetailsPage(Habit(
-                    1,
-                    habitName,
-                    habitInterval,
-                    HabitDate("Sun", "14"),
-                ))
-                binding.root.findNavController().navigate(action)
+                val action = habitData.id?.let { id ->
+                    HomeFragmentDirections.actionHomePageToDetailsPage(id)
+                }
+                if (action != null) {
+                    binding.root.findNavController().navigate(action)
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.example.habits.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.habits.utils.baseObjects.BaseItem
+import com.example.habits.data.baseObjects.BaseItem
 
 class BaseItemDiffUtils(private val oldList: List<BaseItem>,
                         private val newList: List<BaseItem>

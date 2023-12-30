@@ -1,7 +1,7 @@
 package com.example.habits.utils
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.habits.models.HabitDate
+import com.example.habits.data.models.HabitDate
 
 class HabitDataDiffUtils(
     private val oldList: List<HabitDate>,
