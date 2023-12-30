@@ -5,4 +5,5 @@
     <string name="reminder">Reminder</string>
     <string name="just_notification">Just notification</string>
     <string name="add">add</string>
+    <string name="title">Title</string>
 </resources>

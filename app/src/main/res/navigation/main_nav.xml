@@ -7,22 +7,28 @@
     <fragment
         android:id="@+id/homePage"
         android:name="com.example.habits.fragments.home.HomeFragment"
-        android:label="HomePage"
+        android:label="Hebits"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homePage_to_detailsPage"
             app:destination="@id/habitDetails"
             app:enterAnim="@anim/from_left"
-            app:exitAnim="@anim/to_left" />
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homePage_to_addFragment"
-            app:destination="@id/addFragment" />
+            app:destination="@id/addFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
 
     <fragment
         android:id="@+id/habitDetails"
         android:name="com.example.habits.fragments.details.DetailsFragment"
-        android:label="habitDetails"
+        android:label="Habit Details"
         tools:layout="@layout/fragment_details">
         <argument
             android:name="habitId"
@@ -31,6 +37,6 @@
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.habits.fragments.add.AddFragment"
-        android:label="AddFragment"
+        android:label="New Habit"
         tools:layout="@layout/fragment_add"/>
 </navigation>
