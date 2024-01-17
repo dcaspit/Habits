@@ -12,16 +12,16 @@
         <action
             android:id="@+id/action_homePage_to_detailsPage"
             app:destination="@id/habitDetails"
-            app:enterAnim="@anim/from_left"
+            app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_right"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_homePage_to_addFragment"
             app:destination="@id/addFragment"
-            app:enterAnim="@anim/from_left"
+            app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_right"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
 
