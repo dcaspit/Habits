@@ -7,9 +7,9 @@ import com.example.habits.fragments.home.components.HabitAddItem
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.BaseItemDiffUtils
 
-class BaseRecyclerAdapter(
-    private var list: ArrayList<BaseItem>
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BaseRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    var list = emptyList<BaseItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if(viewType == BaseItem.HABIT) {

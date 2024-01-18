@@ -11,27 +11,44 @@ abstract class HabitsDatabase: RoomDatabase() {
 
     abstract fun habitDao(): HabitDao
 
+//    companion object {
+//        @Volatile
+//        private var INSTANCE: HabitsDatabase? = null
+//
+//        fun getDatabase(context: Context): HabitsDatabase {
+//            val temp = INSTANCE
+//
+//            if(temp != null) {
+//                return temp
+//            }
+//
+//            synchronized(this) {
+//                val instance = Room.databaseBuilder(
+//                    context.applicationContext,
+//                    HabitsDatabase::class.java,
+//                    "habits_database"
+//                ).build()
+//                INSTANCE = instance
+//                return instance
+//            }
+//        }
+//    }
+
     companion object {
         @Volatile
         private var INSTANCE: HabitsDatabase? = null
 
-        fun getDatabase(context: Context): HabitsDatabase {
-            val temp = INSTANCE
-
-            if(temp != null) {
-                return temp
+        fun getDatabase(context: Context): HabitsDatabase =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE
+                    ?: buildDatabase(context).also { INSTANCE = it }
             }
 
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    HabitsDatabase::class.java,
-                    "habits_database"
-                ).build()
-                INSTANCE = instance
-                return instance
-            }
-        }
+        private fun buildDatabase(context: Context) =
+            Room.databaseBuilder(
+                context.applicationContext,
+                HabitsDatabase::class.java, "habits_database"
+            ).build()
     }
 
 }

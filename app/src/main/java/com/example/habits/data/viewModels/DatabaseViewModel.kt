@@ -27,5 +27,17 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         return repository.getHabitById(id)
     }
 
+    fun updataHabit(habitData: HabitData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateHabit(habitData)
+        }
+    }
+
+    fun deleteHabit(habitData: HabitData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteHabit(habitData)
+        }
+    }
+
 
 }

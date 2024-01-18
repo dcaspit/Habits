@@ -13,9 +13,7 @@ import com.example.habits.data.models.HabitData
 import com.example.habits.data.models.HabitDate
 import com.example.habits.data.models.HabitIntervals
 
-class HabitItem(
-    private val habitData: HabitData,
-) : BaseItem() {
+class HabitItem(val habitData: HabitData) : BaseItem() {
 
     override val viewType: Int = HABIT
 

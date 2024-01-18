@@ -16,7 +16,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.R
 import com.example.habits.data.viewModels.HabitsViewModel
 import com.example.habits.databinding.FragmentHomeBinding
@@ -24,18 +26,22 @@ import com.example.habits.fragments.home.components.HabitAddItem
 import com.example.habits.data.baseObjects.BaseRecyclerAdapter
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.data.baseObjects.BaseItem
+import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
+    var sharedPreferences: SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
 
     private val binding get() = _binding!!
     private var _binding: FragmentHomeBinding? = null
 
-    private val baseRecyclerAdapter: BaseRecyclerAdapter by lazy { BaseRecyclerAdapter(arrayListOf()) }
+    private val baseRecyclerAdapter: BaseRecyclerAdapter by lazy { BaseRecyclerAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,8 +50,8 @@ class HomeFragment : Fragment() {
         try {
             _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
             binding.lifecycleOwner = viewLifecycleOwner
-            binding.recyclerView.adapter = baseRecyclerAdapter
-            binding.recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+
+            setupRecyclerView()
 
             sharedPreferences = requireActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE)
 
@@ -62,9 +68,6 @@ class HomeFragment : Fragment() {
         }
         return null;
     }
-
-    var sharedPreferences: SharedPreferences? = null
-    var editor: SharedPreferences.Editor? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,6 +97,40 @@ class HomeFragment : Fragment() {
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun setupRecyclerView() {
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = baseRecyclerAdapter
+        recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
+        swipeToDelete(recyclerView)
+    }
+
+    private fun swipeToDelete(recyclerView: RecyclerView) {
+        val swipeToDeleteCallback = object : SwipeToDelete() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val deletedItem = baseRecyclerAdapter.list[viewHolder.adapterPosition]
+                if (deletedItem is HabitItem) {
+                    mDatabaseViewModel.deleteHabit(deletedItem.habitData)
+                    baseRecyclerAdapter.notifyItemRemoved(viewHolder.adapterPosition)
+                    // Restore Deleted Item
+                    restoreDeletedData(viewHolder.itemView, deletedItem.habitData)
+                }
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun restoreDeletedData(view: View, deletedItem: HabitData) {
+        val snackBar = Snackbar.make(
+            view, "Deleted '${deletedItem.title}'",
+            Snackbar.LENGTH_LONG
+        )
+        snackBar.setAction("Undo") {
+            mDatabaseViewModel.insertHabit(deletedItem)
+        }
+        snackBar.show()
     }
 
     override fun onDestroyView() {
