@@ -24,12 +24,6 @@ class HabitAddItem: BaseItem() {
     ): RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             binding.text.text = "Add Habit"
-
-            binding.root.setOnClickListener {
-                val action =  HomeFragmentDirections.actionHomePageToAddFragment()
-                binding.root.findNavController().navigate(action)
-
-            }
         }
     }
 

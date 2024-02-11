@@ -32,28 +32,7 @@ class HabitItem(val habitData: HabitData) : BaseItem() {
             binding.habitName.text = habitData.title
             binding.habitInterval.text = HabitIntervals.values().find { it.ordinal == habitData.interval }?.name ?: ""
             val recyclerView = binding.calendar
-            adapter.setData(listOf(
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-                HabitDate("Sun", "14"),
-            ))
+            adapter.setData(HabitDateCreator.getListOfHabitDates())
             recyclerView.adapter = adapter
             val horizonatalLayoutManager = LinearLayoutManager(
                 binding.root.context,

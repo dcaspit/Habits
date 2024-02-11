@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -56,10 +57,13 @@ class HomeFragment : Fragment() {
             sharedPreferences = requireActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE)
 
             mDatabaseViewModel.getAllHabits.observe(viewLifecycleOwner) {
-                val items: List<BaseItem> = it.map { habit -> HabitItem(habit) }
-                val updatedItems = items + HabitAddItem()
-                baseRecyclerAdapter.setData(updatedItems)
+                baseRecyclerAdapter.setData(it.map { habit -> HabitItem(habit) })
                 binding.recyclerView.scheduleLayoutAnimation()
+            }
+
+            binding.floatingActionButton.setOnClickListener {
+                val action =  HomeFragmentDirections.actionHomePageToAddFragment()
+                binding.root.findNavController().navigate(action)
             }
 
             return binding.root
@@ -103,7 +107,7 @@ class HomeFragment : Fragment() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = baseRecyclerAdapter
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        swipeToDelete(recyclerView)
+        //swipeToDelete(recyclerView)
     }
 
     private fun swipeToDelete(recyclerView: RecyclerView) {
