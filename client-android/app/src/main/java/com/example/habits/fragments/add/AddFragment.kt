@@ -24,18 +24,11 @@ class AddFragment : Fragment() {
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
 
-    val activityToolbar: Toolbar
-        get() = (requireActivity() as MainActivity).binding.activityToolbar
-
-    val toolbar: Toolbar get() = binding.exSevenToolbar
-
     val titleRes: Int = R.string.add_habit_title
 
     override fun onStart() {
         super.onStart()
 
-        activityToolbar.visibility = View.GONE
-        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.title = context?.getString(titleRes)
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -44,11 +37,8 @@ class AddFragment : Fragment() {
     override fun onStop() {
         super.onStop()
 
-        activityToolbar.visibility = View.VISIBLE
-        (requireActivity() as AppCompatActivity).setSupportActionBar(activityToolbar)
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.title = context?.getString(R.string.activity_main_title)
-        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onCreateView(

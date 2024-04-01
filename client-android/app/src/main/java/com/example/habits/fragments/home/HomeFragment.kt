@@ -9,7 +9,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -19,6 +21,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habits.MainActivity
 import com.example.habits.R
 import com.example.habits.data.baseObjects.BaseRecyclerAdapter
 import com.example.habits.data.models.HabitData
@@ -44,7 +47,7 @@ class HomeFragment : Fragment() {
     ): View? {
         try {
             _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-            binding.lifecycleOwner = viewLifecycleOwner
+            //binding.lifecycleOwner = viewLifecycleOwner
 
             setupRecyclerView()
 
