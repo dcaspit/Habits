@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.habits.data.models.HabitAction
 import com.example.habits.data.models.HabitData
 
-@Database(entities = [HabitData::class], version = 1, exportSchema = false)
+@Database(entities = [HabitData::class, HabitAction::class], version = 1, exportSchema = false)
 abstract class HabitsDatabase: RoomDatabase() {
 
     abstract fun habitDao(): HabitDao

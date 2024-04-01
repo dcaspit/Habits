@@ -4,9 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.habits.MainActivity
+import com.example.habits.R
 import com.example.habits.data.models.HabitData
 import com.example.habits.data.models.HabitIntervals
 import com.example.habits.data.models.HabitType
@@ -19,6 +23,33 @@ class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
+
+    val activityToolbar: Toolbar
+        get() = (requireActivity() as MainActivity).binding.activityToolbar
+
+    val toolbar: Toolbar get() = binding.exSevenToolbar
+
+    val titleRes: Int = R.string.add_habit_title
+
+    override fun onStart() {
+        super.onStart()
+
+        activityToolbar.visibility = View.GONE
+        (requireActivity() as AppCompatActivity).setSupportActionBar(toolbar)
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.title = context?.getString(titleRes)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        activityToolbar.visibility = View.VISIBLE
+        (requireActivity() as AppCompatActivity).setSupportActionBar(activityToolbar)
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.title = context?.getString(R.string.activity_main_title)
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -15,23 +15,17 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.R
-import com.example.habits.data.viewModels.HabitsViewModel
-import com.example.habits.databinding.FragmentHomeBinding
-import com.example.habits.fragments.home.components.HabitAddItem
 import com.example.habits.data.baseObjects.BaseRecyclerAdapter
-import com.example.habits.fragments.home.components.HabitItem
-import com.example.habits.data.baseObjects.BaseItem
 import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
+import com.example.habits.databinding.FragmentHomeBinding
+import com.example.habits.fragments.home.components.HabitItem
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
@@ -75,32 +69,32 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val menuHost: MenuHost = requireActivity()
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.list_fragment_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                when(menuItem.itemId) {
-                    R.id.menu_theme -> {
-                        val nightMode = sharedPreferences?.getBoolean("night", false)
-
-                        if(nightMode == true) {
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                            editor = sharedPreferences?.edit()
-                            editor?.putBoolean("night", false)
-                        } else {
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                            editor = sharedPreferences?.edit()
-                            editor?.putBoolean("night", true)
-                        }
-                        editor?.apply()
-                    }
-                }
-                return true
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//        val menuHost: MenuHost = requireActivity()
+//        menuHost.addMenuProvider(object : MenuProvider {
+//            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                menuInflater.inflate(R.menu.list_fragment_menu, menu)
+//            }
+//
+//            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                when(menuItem.itemId) {
+//                    R.id.menu_theme -> {
+//                        val nightMode = sharedPreferences?.getBoolean("night", false)
+//
+//                        if(nightMode == true) {
+//                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                            editor = sharedPreferences?.edit()
+//                            editor?.putBoolean("night", false)
+//                        } else {
+//                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                            editor = sharedPreferences?.edit()
+//                            editor?.putBoolean("night", true)
+//                        }
+//                        editor?.apply()
+//                    }
+//                }
+//                return true
+//            }
+//        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun setupRecyclerView() {

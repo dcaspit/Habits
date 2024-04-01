@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.habits.data.models.HabitAction
 import com.example.habits.data.models.HabitData
 
 @Dao
@@ -18,7 +19,7 @@ interface HabitDao {
     @Query("SELECT * FROM habits_table WHERE habit_id = :habitId")
     fun getHabit(habitId: Int): LiveData<HabitData>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHabit(habitData: HabitData)
 
     @Update
@@ -26,5 +27,11 @@ interface HabitDao {
 
     @Delete
     fun deleteHabit(habitData: HabitData)
+
+    @Query("SELECT * FROM habits_actions_table WHERE habit_id = :habitId ")
+    fun getHabitActions(habitId: Int): LiveData<List<HabitAction>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertHabitAction(habit: HabitAction)
 
 }

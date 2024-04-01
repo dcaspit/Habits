@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+        android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/exSevenToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
         android:id="@+id/et_title"
@@ -35,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="10dp"
-        android:background="@color/editTextBackgroundDark"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/rv_colors_picker" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/times_a_week"
-            android:textColor="@color/editTextBackgroundDark"
+            android:textColor="@color/colorPrimary"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_frequency" />
@@ -111,7 +124,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="10dp"
-        android:background="@color/editTextBackgroundDark"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/cl_frequency" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:text="@string/just_notification"
-            android:textColor="@color/editTextBackgroundDark"
+            android:textColor="@color/colorPrimary"
             android:textSize="11sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_reminder" />
@@ -156,7 +169,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginTop="10dp"
-        android:background="@color/editTextBackgroundDark"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/cl_reminder" />
 
     <Button
@@ -169,4 +182,4 @@
         app:layout_constraintTop_toBottomOf="@id/divder_3" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

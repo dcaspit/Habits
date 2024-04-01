@@ -7,4 +7,6 @@
     <string name="add">add</string>
     <string name="title">Title</string>
     <string name="change_theme">change theme</string>
+    <string name="activity_main_title">Hebits</string>
+    <string name="add_habit_title">New Habit</string>
 </resources>
