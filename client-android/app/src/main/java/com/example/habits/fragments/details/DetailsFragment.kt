@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.example.habits.R
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentDetailsBinding
 
@@ -19,6 +21,19 @@ class DetailsFragment: Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
+    override fun onStart() {
+        super.onStart()
+
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.title = context?.getString(R.string.activity_main_title)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -30,6 +45,9 @@ class DetailsFragment: Fragment() {
 
             habit.observe(viewLifecycleOwner) {
                 binding.text.text = it.title
+                val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+                actionBar?.title = it.title
+                actionBar?.setDisplayHomeAsUpEnabled(true)
             }
 
             return binding.root
