@@ -32,6 +32,8 @@ import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.CalendarDayBinding
 import com.example.habits.databinding.FragmentHomeBinding
 import com.example.habits.fragments.home.components.HabitItem
+import com.example.habits.utils.displayText
+import com.example.habits.utils.getColorCompat
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
@@ -49,19 +51,12 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 class HomeFragment : Fragment() {
-
-    var sharedPreferences: SharedPreferences? = null
-    var editor: SharedPreferences.Editor? = null
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
-
+    private val baseRecyclerAdapter: BaseRecyclerAdapter by lazy { BaseRecyclerAdapter() }
+    private var selectedDate = LocalDate.now()
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd")
     private val binding get() = _binding!!
     private var _binding: FragmentHomeBinding? = null
-
-    private val baseRecyclerAdapter: BaseRecyclerAdapter by lazy { BaseRecyclerAdapter() }
-
-    private var selectedDate = LocalDate.now()
-
-    private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,8 +67,6 @@ class HomeFragment : Fragment() {
             //binding.lifecycleOwner = viewLifecycleOwner
 
             setupRecyclerView()
-
-            sharedPreferences = requireActivity().getSharedPreferences("MODE", Context.MODE_PRIVATE)
 
             mDatabaseViewModel.getAllHabits.observe(viewLifecycleOwner) {
                 baseRecyclerAdapter.setData(it.map { habit -> HabitItem(habit) })
@@ -138,46 +131,11 @@ class HomeFragment : Fragment() {
         binding.exSevenCalendar.scrollToDate(LocalDate.now())
     }
 
-    fun Context.getColorCompat(@ColorRes color: Int) =
-        ContextCompat.getColor(this, color)
-
-    fun YearMonth.displayText(short: Boolean = false): String {
-        return "${this.month.displayText(short = short)} ${this.year}"
-    }
-
-    fun Month.displayText(short: Boolean = true): String {
-        val style = if (short) TextStyle.SHORT else TextStyle.FULL
-        return getDisplayName(style, Locale.ENGLISH)
-    }
-
-    fun DayOfWeek.displayText(uppercase: Boolean = false): String {
-        return getDisplayName(TextStyle.SHORT, Locale.ENGLISH).let { value ->
-            if (uppercase) value.uppercase(Locale.ENGLISH) else value
-        }
-    }
-
-
-    fun getWeekPageTitle(week: Week): String {
-        val firstDate = week.days.first().date
-        val lastDate = week.days.last().date
-        return when {
-            firstDate.yearMonth == lastDate.yearMonth -> {
-                firstDate.yearMonth.displayText()
-            }
-            firstDate.year == lastDate.year -> {
-                "${firstDate.month.displayText(short = false)} - ${lastDate.yearMonth.displayText()}"
-            }
-            else -> {
-                "${firstDate.yearMonth.displayText()} - ${lastDate.yearMonth.displayText()}"
-            }
-        }
-    }
-
     private fun setupRecyclerView() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = baseRecyclerAdapter
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
-        //swipeToDelete(recyclerView)
+        swipeToDelete(recyclerView)
     }
 
     private fun swipeToDelete(recyclerView: RecyclerView) {

@@ -16,6 +16,7 @@ import com.example.habits.data.models.HabitIntervals
 import com.example.habits.data.models.HabitType
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
+import java.time.LocalDate
 
 class AddFragment : Fragment() {
 
@@ -75,6 +76,7 @@ class AddFragment : Fragment() {
                 HabitData(
                     binding.etTitle.text.toString(),
                     if (binding.tvNumber.text == "7") HabitIntervals.EVERYDAY.ordinal else HabitIntervals.EVEYWEEK.ordinal,
+                    LocalDate.now().toString(),
                     0,
                     HabitType.DONE_NOTDONE.ordinal,
                 )
