@@ -17,11 +17,11 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="Example4ToolbarTheme" parent="ThemeOverlay.MaterialComponents.Light">
-        <item name="colorControlNormal">@color/example_4_grey</item>
+        <item name="colorControlNormal">@color/blue_grey_700</item>
     </style>
 
     <style name="Example4ButtonTheme" parent="ThemeOverlay.MaterialComponents.Light">
-        <item name="colorPrimary">@color/example_4_green</item>
+        <item name="colorPrimary">@color/green_700</item>
     </style>
 
 </resources>

@@ -21,6 +21,7 @@ import java.time.LocalDate
 class AddFragment : Fragment() {
 
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
+    private val mAddViewModel: AddViewModel by viewModels()
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
@@ -29,7 +30,6 @@ class AddFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.title = context?.getString(titleRes)
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -37,7 +37,6 @@ class AddFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.title = context?.getString(R.string.activity_main_title)
     }
@@ -49,40 +48,40 @@ class AddFragment : Fragment() {
     ): View {
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
 
-        binding.tvPlusButton.setOnClickListener {
-            try {
-                var num = Integer.valueOf(binding.tvNumber.text.toString())
-                if (num > 6) return@setOnClickListener
-                num += 1
-                binding.tvNumber.text = num.toString()
-            }catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
+//        binding.tvPlusButton.setOnClickListener {
+//            try {
+//                var num = Integer.valueOf(binding.tvNumber.text.toString())
+//                if (num > 6) return@setOnClickListener
+//                num += 1
+//                binding.tvNumber.text = num.toString()
+//            }catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//
+//        binding.tvMinusButton.setOnClickListener {
+//            try {
+//                var num = Integer.valueOf(binding.tvNumber.text.toString())
+//                if (num < 2) return@setOnClickListener
+//                num -= 1
+//                binding.tvNumber.text = num.toString()
+//            }catch (e: Exception) {
+//                e.printStackTrace()
+//            }
+//        }
 
-        binding.tvMinusButton.setOnClickListener {
-            try {
-                var num = Integer.valueOf(binding.tvNumber.text.toString())
-                if (num < 2) return@setOnClickListener
-                num -= 1
-                binding.tvNumber.text = num.toString()
-            }catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        binding.buttonAdd.setOnClickListener {
-            mDatabaseViewModel.insertHabit(
-                HabitData(
-                    binding.etTitle.text.toString(),
-                    if (binding.tvNumber.text == "7") HabitIntervals.EVERYDAY.ordinal else HabitIntervals.EVEYWEEK.ordinal,
-                    LocalDate.now().toString(),
-                    0,
-                    HabitType.DONE_NOTDONE.ordinal,
-                )
-            )
-            findNavController().popBackStack()
-        }
+//        binding.buttonAdd.setOnClickListener {
+//            mDatabaseViewModel.insertHabit(
+//                HabitData(
+//                    binding.etTitle.text.toString(),
+//                    if (binding.tvNumber.text == "7") HabitIntervals.EVERYDAY.ordinal else HabitIntervals.EVEYWEEK.ordinal,
+//                    LocalDate.now().toString(),
+//                    0,
+//                    HabitType.DONE_NOTDONE.ordinal,
+//                )
+//            )
+//            findNavController().popBackStack()
+//        }
 
         return binding.root
     }

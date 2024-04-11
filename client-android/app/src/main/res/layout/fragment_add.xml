@@ -4,105 +4,218 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-        android:orientation="vertical">
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_title"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_field_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:autofillHints="@string/title"
-        android:background="@drawable/rounded_edit"
-        android:hint="@string/title"
-        android:inputType="textPersonName"
-        android:padding="5dp"
-        android:textColor="#d3d3d3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:hint="@string/name_your_habit"
+        android:padding="20dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_colors_picker"
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_colors"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_title" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button_blue"
+            android:padding="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_red"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button_red"
+            android:padding="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button_green"
+            android:padding="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_button_yellow"
+            android:padding="10dp" />
+
+    </LinearLayout>
 
     <View
-        android:id="@+id/divder_1"
+        android:id="@+id/divider_1"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/rv_colors_picker" />
+        android:background="@color/blue_grey_700" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_frequency"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/divder_1">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/divider_1">
 
-        <TextView
-            android:id="@+id/tv_frequency"
+        <Button
+            android:id="@+id/daily_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/frequency"
+            android:text="Daily"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="10dp"
+            />
+
+        <Button
+            android:id="@+id/weekly_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weekly"
+            app:layout_constraintStart_toEndOf="@id/daily_button"
+            app:layout_constraintEnd_toStartOf="@id/monthly_button"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_times"
+        <Button
+            android:id="@+id/monthly_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/times_a_week"
-            android:textColor="@color/colorPrimary"
-            android:textSize="11sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_frequency" />
-
-        <TextView
-            android:id="@+id/tv_plus_button"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/rounded_edit"
-            android:gravity="center"
-            android:text="+"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Monthly"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="10dp"/>
 
-        <TextView
-            android:id="@+id/tv_number"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:gravity="center"
-            android:text="3"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_plus_button"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/repeat_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/daily_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            >
+
+            <TextView
+                android:id="@+id/repeat_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Repeat every day"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/blue_grey_700"
+                />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <TextView
-            android:id="@+id/tv_minus_button"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/rounded_edit"
-            android:gravity="center|center_vertical"
-            android:text="-"
-            android:textColor="@color/white"
-            android:textSize="26sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_number"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:id="@+id/ll_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            app:layout_constraintTop_toBottomOf="@id/repeat_container">
+
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="M"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="T"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="W"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="T"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="F"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="S"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/round_button_blue"
+                android:text="S"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                android:padding="10dp" />
+
+
+
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
