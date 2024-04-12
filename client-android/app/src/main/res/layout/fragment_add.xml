@@ -211,10 +211,6 @@
                 android:textSize="16dp"
                 android:textColor="@color/white"
                 android:padding="10dp" />
-
-
-
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
