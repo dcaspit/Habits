@@ -96,39 +96,39 @@ class HomeFragment : Fragment() {
                     if (selectedDate != day.date) {
                         val oldDate = selectedDate
                         selectedDate = day.date
-                        binding.exSevenCalendar.notifyDateChanged(day.date)
-                        oldDate?.let { binding.exSevenCalendar.notifyDateChanged(it) }
+                        binding.viewCalendar.notifyDateChanged(day.date)
+                        oldDate?.let { binding.viewCalendar.notifyDateChanged(it) }
                     }
                 }
             }
 
             fun bind(day: WeekDay) {
                 this.day = day
-                bind.exSevenDateText.text = dateFormatter.format(day.date)
-                bind.exSevenDayText.text = day.date.dayOfWeek.displayText()
+                bind.dateText.text = dateFormatter.format(day.date)
+                bind.dayText.text = day.date.dayOfWeek.displayText()
 
                 val colorRes = if (day.date == selectedDate) {
                     R.color.example_7_yellow
                 } else {
                     R.color.example_7_white
                 }
-                bind.exSevenDateText.setTextColor(view.context.getColorCompat(colorRes))
-                bind.exSevenSelectedView.isVisible = day.date == selectedDate
+                bind.dateText.setTextColor(view.context.getColorCompat(colorRes))
+                bind.selectedView.isVisible = day.date == selectedDate
             }
         }
 
-        binding.exSevenCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
+        binding.viewCalendar.dayBinder = object : WeekDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, data: WeekDay) = container.bind(data)
         }
 
         val currentMonth = YearMonth.now()
-        binding.exSevenCalendar.setup(
+        binding.viewCalendar.setup(
             currentMonth.minusMonths(5).atStartOfMonth(),
             currentMonth.plusMonths(5).atEndOfMonth(),
             firstDayOfWeekFromLocale(),
         )
-        binding.exSevenCalendar.scrollToDate(LocalDate.now())
+        binding.viewCalendar.scrollToDate(LocalDate.now())
     }
 
     private fun setupRecyclerView() {
