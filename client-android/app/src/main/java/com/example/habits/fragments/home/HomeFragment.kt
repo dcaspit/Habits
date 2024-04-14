@@ -34,6 +34,7 @@ import com.example.habits.databinding.FragmentHomeBinding
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.displayText
 import com.example.habits.utils.getColorCompat
+import com.example.habits.utils.makeGone
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
@@ -57,6 +58,12 @@ class HomeFragment : Fragment() {
     private val dateFormatter = DateTimeFormatter.ofPattern("dd")
     private val binding get() = _binding!!
     private var _binding: FragmentHomeBinding? = null
+
+    override fun onStart() {
+        super.onStart()
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,12 +114,9 @@ class HomeFragment : Fragment() {
                 bind.dateText.text = dateFormatter.format(day.date)
                 bind.dayText.text = day.date.dayOfWeek.displayText()
 
-                val colorRes = if (day.date == selectedDate) {
-                    R.color.example_7_yellow
-                } else {
-                    R.color.example_7_white
+                if (day.date == selectedDate) {
+                    bind.dateText.setTextColor(view.context.getColorCompat(R.color.example_7_yellow))
                 }
-                bind.dateText.setTextColor(view.context.getColorCompat(colorRes))
                 bind.selectedView.isVisible = day.date == selectedDate
             }
         }

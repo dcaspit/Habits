@@ -24,7 +24,8 @@ class MainActivity: AppCompatActivity() {
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        setupActionBarWithNavController(navController)
+        //setupActionBarWithNavController(navController)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

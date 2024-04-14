@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
-            android:textColor="@color/example_7_white"
+            android:textColor="?colorOnPrimary"
             android:textSize="12sp"
             tools:text="Mon" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-black"
-            android:textColor="@color/example_7_white"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp"
             tools:text="24" />
     </LinearLayout>

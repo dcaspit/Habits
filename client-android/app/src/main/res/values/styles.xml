@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="AppTheme.ToolBar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextColor">?colorOnPrimary</item>
+    </style>
+
 
 </resources>
