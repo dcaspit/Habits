@@ -2,12 +2,12 @@
     <string name="app_name">Habits</string>
     <string name="frequency">Frequency</string>
     <string name="times_a_week">Times a week</string>
-    <string name="reminder">Reminder</string>
-    <string name="just_notification">Just notification</string>
+    <string name="reminder">Get reminders</string>
+    <string name="add_reminder_time">Add reminder Time</string>
     <string name="add">add</string>
     <string name="title">Title</string>
     <string name="change_theme">change theme</string>
-    <string name="activity_main_title">Hebits</string>
+    <string name="activity_main_title">Habits</string>
     <string name="add_habit_title">New Habit</string>
     <string name="name_your_habit">Name your habit</string>
     <string name="add_habit">Add Habit</string>
