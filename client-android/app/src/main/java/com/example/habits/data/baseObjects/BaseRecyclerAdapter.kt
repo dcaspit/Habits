@@ -3,6 +3,7 @@ package com.example.habits.data.baseObjects
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habits.fragments.home.components.EmptyItem
 import com.example.habits.fragments.home.components.HabitAddItem
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.BaseItemDiffUtils
@@ -14,6 +15,8 @@ class BaseRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if(viewType == BaseItem.HABIT) {
             return HabitItem.create(parent)
+        } else if (viewType == BaseItem.EMPTY_HABIT) {
+            return EmptyItem.create(parent)
         }
         return HabitAddItem.create(parent)
     }

@@ -31,6 +31,7 @@ import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.CalendarDayBinding
 import com.example.habits.databinding.FragmentHomeBinding
+import com.example.habits.fragments.home.components.EmptyItem
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.displayText
 import com.example.habits.utils.getColorCompat
@@ -76,7 +77,11 @@ class HomeFragment : Fragment() {
             setupRecyclerView()
 
             mDatabaseViewModel.getAllHabits.observe(viewLifecycleOwner) {
-                baseRecyclerAdapter.setData(it.map { habit -> HabitItem(habit) })
+                if (it.isEmpty()) {
+                    baseRecyclerAdapter.setData(listOf(EmptyItem()))
+                } else {
+                    baseRecyclerAdapter.setData(it.map { habit -> HabitItem(habit) })
+                }
                 binding.recyclerView.scheduleLayoutAnimation()
             }
 
