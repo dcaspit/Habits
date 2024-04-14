@@ -10,4 +10,5 @@
     <string name="activity_main_title">Hebits</string>
     <string name="add_habit_title">New Habit</string>
     <string name="name_your_habit">Name your habit</string>
+    <string name="add_habit">Add Habit</string>
 </resources>

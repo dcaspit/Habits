@@ -30,14 +30,14 @@
             android:id="@+id/floatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="24dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_add"
-            android:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/add_habit" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
