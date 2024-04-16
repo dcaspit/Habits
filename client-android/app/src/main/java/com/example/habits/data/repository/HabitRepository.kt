@@ -6,8 +6,6 @@ import com.example.habits.data.models.HabitData
 
 class HabitRepository(private val habitDao: HabitDao) {
 
-    val getAllHabits: LiveData<List<HabitData>> = habitDao.getAllHabits()
-
     suspend fun insertHabit(habitData: HabitData) {
         habitDao.insertHabit(habitData)
     }

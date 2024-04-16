@@ -78,16 +78,8 @@ class HomeFragment : Fragment() {
             //binding.lifecycleOwner = viewLifecycleOwner
 
             setupRecyclerView()
-
-            mDatabaseViewModel.getAllHabits.observe(viewLifecycleOwner) {
-                if (it.isEmpty()) {
-                    baseRecyclerAdapter.setData(listOf(EmptyItem()))
-                } else {
-                    val filtered = it.filter { habitData -> shouldTrackHabitToday(habitData) }
-                    baseRecyclerAdapter.setData(filtered.map { habit -> HabitItem(habit) })
-                }
-                binding.recyclerView.scheduleLayoutAnimation()
-            }
+            observeHabits()
+            mDatabaseViewModel.getAllHabits()
 
             binding.floatingActionButton.setOnClickListener {
                 val action =  HomeFragmentDirections.actionHomePageToAddFragment()
@@ -101,26 +93,40 @@ class HomeFragment : Fragment() {
         return null;
     }
 
+    private fun observeHabits() {
+        mDatabaseViewModel.habits.observe(viewLifecycleOwner) {
+            if(it.isEmpty()) return@observe
+            val filtered = it.filter { habitData -> shouldTrackHabitToday(habitData) }
+            if(filtered.isEmpty()) return@observe
+            baseRecyclerAdapter.setData(filtered.map { habit -> HabitItem(habit) })
+            binding.recyclerView.scheduleLayoutAnimation()
+        }
+    }
+
     fun shouldTrackHabitToday(habit: HabitData): Boolean {
-        val today = LocalDate.now()
         val startDate = stringToLocalDate(habit.startDate)
-        val endDate = stringToLocalDate(habit.endDate ?: LocalDate.MAX.toString()) // If endDate is null, assume the habit is ongoing
 
         // Check if the current date is within the habit's start and end dates
-        if (today.isBefore(startDate) || today.isAfter(endDate)) {
+        if (selectedDate.isBefore(startDate)) {
             return false
         }
 
-        // Calculate the number of days since the start date
-        val daysSinceStart = ChronoUnit.DAYS.between(startDate, today)
+        val days = habit.trackDays.split(",")
+
+        days.forEach { day ->
+            if(day == selectedDate.dayOfWeek.toString()) {
+                return true
+            }
+        }
+        return false
 
         // Determine if the habit should be tracked based on the frequency
-        return when (habit.frequency) {
-            "daily" -> true
-            "weekly" -> (daysSinceStart % 7).toInt() == 0 // Track on every 7th day
-            "monthly" -> today.dayOfMonth == startDate.dayOfMonth // Track on the same day of the month
-            else -> false // Unknown frequency
-        }
+//        return when (habit.frequency) {
+//            "daily" -> true
+//            "weekly" -> (daysSinceStart % 7).toInt() == 0 // Track on every 7th day
+//            "monthly" -> today.dayOfMonth == startDate.dayOfMonth // Track on the same day of the month
+//            else -> false // Unknown frequency
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,6 +142,8 @@ class HomeFragment : Fragment() {
                         selectedDate = day.date
                         binding.viewCalendar.notifyDateChanged(day.date)
                         oldDate?.let { binding.viewCalendar.notifyDateChanged(it) }
+                        emptyMainList()
+                        mDatabaseViewModel.getAllHabits()
                     }
                 }
             }
@@ -173,6 +181,11 @@ class HomeFragment : Fragment() {
         recyclerView.adapter = baseRecyclerAdapter
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
         swipeToDelete(recyclerView)
+        emptyMainList()
+    }
+
+    private fun emptyMainList() {
+        baseRecyclerAdapter.setData(listOf(EmptyItem()))
     }
 
     private fun swipeToDelete(recyclerView: RecyclerView) {

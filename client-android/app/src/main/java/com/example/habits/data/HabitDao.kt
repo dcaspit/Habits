@@ -14,7 +14,7 @@ import com.example.habits.data.models.HabitData
 interface HabitDao {
 
     @Query("SELECT * FROM habits_table ORDER BY habit_id ASC")
-    fun getAllHabits(): LiveData<List<HabitData>>
+    fun getAllHabits(): List<HabitData>
 
     @Query("SELECT * FROM habits_table WHERE habit_id = :habitId")
     fun getHabit(habitId: Int): LiveData<HabitData>

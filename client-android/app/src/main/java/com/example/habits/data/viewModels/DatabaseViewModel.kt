@@ -3,6 +3,7 @@ package com.example.habits.data.viewModels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.habits.data.HabitsDatabase
 import com.example.habits.data.models.HabitData
@@ -15,7 +16,15 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     private val habitDao = HabitsDatabase.getDatabase(application).habitDao()
     private val repository: HabitRepository = HabitRepository(habitDao)
 
-    val getAllHabits: LiveData<List<HabitData>> = repository.getAllHabits
+    private val _habits = MutableLiveData<List<HabitData>>()
+    val habits: LiveData<List<HabitData>>
+        get() = _habits
+
+    fun getAllHabits() {
+        viewModelScope.launch(Dispatchers.IO) {
+           _habits.postValue(habitDao.getAllHabits())
+        }
+    }
 
     fun insertHabit(habitData: HabitData) {
         viewModelScope.launch(Dispatchers.IO) {
