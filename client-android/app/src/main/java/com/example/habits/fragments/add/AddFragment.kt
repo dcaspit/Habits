@@ -15,6 +15,8 @@ import com.example.habits.R
 import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
+import com.example.habits.utils.getPrimaryColor
+import com.example.habits.utils.localDateToString
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import java.time.DayOfWeek
@@ -80,7 +82,7 @@ class AddFragment : Fragment() {
                     binding.textFieldName.text.toString(),
                     "",
                     "daily",
-                    LocalDate.now().toString(),
+                    localDateToString(LocalDate.now()),
                     null,
                     stringBuilder.toString()
                 )
@@ -92,7 +94,7 @@ class AddFragment : Fragment() {
     }
 
     private fun MaterialCheckBox.addClickListener(vararg buttons: MaterialButton) {
-        val color = getPrimaryColor()
+        val color = getPrimaryColor(context)
         addOnCheckedStateChangedListener { _, state ->
             buttons.forEachIndexed { i, button ->
                 if(i == 0) {
@@ -111,16 +113,10 @@ class AddFragment : Fragment() {
     }
 
     private fun MaterialButton.addClickListener() {
-         val color = getPrimaryColor()
+         val color = getPrimaryColor(context)
         setOnClickListener {
             toggleButtonBGColor(color)
         }
-    }
-
-    private fun getPrimaryColor(): Int {
-        val typedValue = TypedValue()
-        context?.theme?.resolveAttribute(R.attr.colorPrimary, typedValue, true)
-        return typedValue.data
     }
 
     private fun MaterialButton.toggleButtonBGColor(color: Int) {

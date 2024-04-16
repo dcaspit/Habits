@@ -9,16 +9,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.findViewTreeLifecycleOwner
+import com.example.habits.R
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.yearMonth
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -34,12 +39,11 @@ fun View.makeGone() {
     visibility = View.GONE
 }
 
-fun dpToPx(dp: Int, context: Context): Int =
-    TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dp.toFloat(),
-        context.resources.displayMetrics,
-    ).toInt()
+fun dpToPx(dp: Int, context: Context): Int = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP,
+    dp.toFloat(),
+    context.resources.displayMetrics,
+).toInt()
 
 internal val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
@@ -50,8 +54,7 @@ internal val Context.inputMethodManager
 internal fun Context.getDrawableCompat(@DrawableRes drawable: Int): Drawable =
     requireNotNull(ContextCompat.getDrawable(this, drawable))
 
-internal fun Context.getColorCompat(@ColorRes color: Int) =
-    ContextCompat.getColor(this, color)
+internal fun Context.getColorCompat(@ColorRes color: Int) = ContextCompat.getColor(this, color)
 
 internal fun TextView.setTextColorRes(@ColorRes color: Int) =
     setTextColor(context.getColorCompat(color))
@@ -63,6 +66,26 @@ fun Fragment.addStatusBarColorUpdate(@ColorRes colorRes: Int) {
             requireContext().getColorCompat(colorRes),
         ),
     )
+}
+
+fun localDateToString(localDate: LocalDate, format: String = "yyyy-MM-dd"): String {
+    val formatter = DateTimeFormatter.ofPattern(format)
+    return localDate.format(formatter)
+}
+
+fun stringToLocalDate(dateString: String, format: String = "yyyy-MM-dd"): LocalDate {
+    val formatter = DateTimeFormatter.ofPattern(format)
+    return try {
+        LocalDate.parse(dateString, formatter)
+    } catch (e: DateTimeParseException) {
+        throw IllegalArgumentException("Invalid date format: $dateString", e)
+    }
+}
+
+fun getPrimaryColor(context: Context?, @AttrRes attrRes: Int = R.attr.colorPrimary): Int {
+    val typedValue = TypedValue()
+    context?.theme?.resolveAttribute(attrRes, typedValue, true)
+    return typedValue.data
 }
 
 fun YearMonth.displayText(short: Boolean = false): String {
@@ -96,9 +119,11 @@ fun getWeekPageTitle(week: Week): String {
         firstDate.yearMonth == lastDate.yearMonth -> {
             firstDate.yearMonth.displayText()
         }
+
         firstDate.year == lastDate.year -> {
             "${firstDate.month.displayText(short = false)} - ${lastDate.yearMonth.displayText()}"
         }
+
         else -> {
             "${firstDate.yearMonth.displayText()} - ${lastDate.yearMonth.displayText()}"
         }

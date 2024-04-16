@@ -35,7 +35,9 @@ import com.example.habits.fragments.home.components.EmptyItem
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.displayText
 import com.example.habits.utils.getColorCompat
+import com.example.habits.utils.getPrimaryColor
 import com.example.habits.utils.makeGone
+import com.example.habits.utils.stringToLocalDate
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
@@ -50,6 +52,7 @@ import java.time.Month
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -80,7 +83,8 @@ class HomeFragment : Fragment() {
                 if (it.isEmpty()) {
                     baseRecyclerAdapter.setData(listOf(EmptyItem()))
                 } else {
-                    baseRecyclerAdapter.setData(it.map { habit -> HabitItem(habit) })
+                    val filtered = it.filter { habitData -> shouldTrackHabitToday(habitData) }
+                    baseRecyclerAdapter.setData(filtered.map { habit -> HabitItem(habit) })
                 }
                 binding.recyclerView.scheduleLayoutAnimation()
             }
@@ -95,6 +99,28 @@ class HomeFragment : Fragment() {
             e.printStackTrace()
         }
         return null;
+    }
+
+    fun shouldTrackHabitToday(habit: HabitData): Boolean {
+        val today = LocalDate.now()
+        val startDate = stringToLocalDate(habit.startDate)
+        val endDate = stringToLocalDate(habit.endDate ?: LocalDate.MAX.toString()) // If endDate is null, assume the habit is ongoing
+
+        // Check if the current date is within the habit's start and end dates
+        if (today.isBefore(startDate) || today.isAfter(endDate)) {
+            return false
+        }
+
+        // Calculate the number of days since the start date
+        val daysSinceStart = ChronoUnit.DAYS.between(startDate, today)
+
+        // Determine if the habit should be tracked based on the frequency
+        return when (habit.frequency) {
+            "daily" -> true
+            "weekly" -> (daysSinceStart % 7).toInt() == 0 // Track on every 7th day
+            "monthly" -> today.dayOfMonth == startDate.dayOfMonth // Track on the same day of the month
+            else -> false // Unknown frequency
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -121,6 +147,8 @@ class HomeFragment : Fragment() {
 
                 if (day.date == selectedDate) {
                     bind.dateText.setTextColor(view.context.getColorCompat(R.color.example_7_yellow))
+                } else {
+                    bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorOnPrimary))
                 }
                 bind.selectedView.isVisible = day.date == selectedDate
             }
