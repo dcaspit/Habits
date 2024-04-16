@@ -47,11 +47,40 @@ class AddFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
+
+        makeSharedStateForTheButtons()
+        whenAddClickedMakeSureToCalculateAllSelectedButtons()
+
+        mAddViewModel.days.observe(viewLifecycleOwner) {
+            it.forEach { day ->
+                when (day) {
+                    DayOfWeek.MONDAY -> {
+                        binding.monday.callOnClick()
+                    }
+                    DayOfWeek.TUESDAY -> {
+                        binding.thesday.callOnClick()
+                    }
+                    DayOfWeek.WEDNESDAY -> {
+                        binding.wednesday.callOnClick()
+                    }
+                    DayOfWeek.THURSDAY -> {
+                        binding.thursday.callOnClick()
+                    }
+                    DayOfWeek.FRIDAY -> {
+                        binding.friday.callOnClick()
+                    }
+                    DayOfWeek.SATURDAY -> {
+                        binding.saturday.callOnClick()
+                    }
+                    DayOfWeek.SUNDAY -> {
+                        binding.sunday.callOnClick()
+                    }
+                }
+            }
+        }
 
         with(binding) {
             monday.addClickListener()
@@ -65,14 +94,15 @@ class AddFragment : Fragment() {
             afternoon.addClickListener()
             evening.addClickListener()
 
-            repeatEveryDayCheckbox.addClickListener(monday, thesday, wednesday, thursday, friday, saturday, sunday)
+            repeatEveryDayCheckbox.addClickListener(
+                monday, thesday, wednesday, thursday, friday, saturday, sunday
+            )
             repeatDailyInCheckbox.addClickListener(morning, afternoon, evening)
         }
 
         binding.buttonAdd.setOnClickListener {
-            val setOfDays = setOf(DayOfWeek.WEDNESDAY, DayOfWeek.MONDAY)
             val stringBuilder = StringBuilder()
-            setOfDays.forEach {
+            mAddViewModel.days.value?.forEach {
                 stringBuilder.append(it)
                 stringBuilder.append(",")
             }
@@ -89,7 +119,6 @@ class AddFragment : Fragment() {
             )
             findNavController().popBackStack()
         }
-
         return binding.root
     }
 
@@ -97,33 +126,23 @@ class AddFragment : Fragment() {
         val color = getPrimaryColor(context)
         addOnCheckedStateChangedListener { _, state ->
             buttons.forEachIndexed { i, button ->
-                if(i == 0) {
-                    if (state == MaterialCheckBox.STATE_CHECKED) {
-                        button.backgroundTintList = ColorStateList.valueOf(color)
-                    }
-                } else {
-                    if (state == MaterialCheckBox.STATE_CHECKED) {
-                        button.backgroundTintList = ColorStateList.valueOf(color)
-                    } else {
-                        button.backgroundTintList = null
-                    }
+                if (state == MaterialCheckBox.STATE_CHECKED) {
+                    button.backgroundTintList = ColorStateList.valueOf(color)
+                } else if (i != 0) {
+                    button.backgroundTintList = null
                 }
             }
         }
     }
 
     private fun MaterialButton.addClickListener() {
-         val color = getPrimaryColor(context)
+        val color = getPrimaryColor(context)
         setOnClickListener {
-            toggleButtonBGColor(color)
-        }
-    }
-
-    private fun MaterialButton.toggleButtonBGColor(color: Int) {
-        backgroundTintList = if (backgroundTintList == null) {
-            ColorStateList.valueOf(color)
-        } else {
-            null
+            backgroundTintList = if (backgroundTintList == null) {
+                ColorStateList.valueOf(color)
+            } else {
+                null
+            }
         }
     }
 
