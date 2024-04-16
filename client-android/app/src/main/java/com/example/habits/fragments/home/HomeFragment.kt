@@ -165,7 +165,7 @@ class HomeFragment : Fragment() {
 
     private fun restoreDeletedData(view: View, deletedItem: HabitData) {
         val snackBar = Snackbar.make(
-            view, "Deleted '${deletedItem.title}'",
+            view, "Deleted '${deletedItem.name}'",
             Snackbar.LENGTH_LONG
         )
         snackBar.setAction("Undo") {

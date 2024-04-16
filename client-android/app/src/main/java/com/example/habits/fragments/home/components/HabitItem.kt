@@ -29,16 +29,8 @@ class HabitItem(val habitData: HabitData) : BaseItem() {
 
         private val adapter: HabitItemHorizontalRecyclerAdapter by lazy { HabitItemHorizontalRecyclerAdapter() }
         fun bind(habitData: HabitData) {
-            binding.habitName.text = habitData.title
-            binding.habitInterval.text = HabitIntervals.values().find { it.ordinal == habitData.interval }?.name ?: ""
-            val recyclerView = binding.calendar
-            adapter.setData(HabitDateCreator.getListOfHabitDates())
-            recyclerView.adapter = adapter
-            val horizonatalLayoutManager = LinearLayoutManager(
-                binding.root.context,
-                LinearLayoutManager.HORIZONTAL, false
-            )
-            recyclerView.layoutManager = horizonatalLayoutManager
+            binding.habitName.text = habitData.name
+            binding.habitInterval.text = habitData.frequency
             binding.root.setOnClickListener {
                 val action = habitData.id?.let { id ->
                     HomeFragmentDirections.actionHomePageToDetailsPage(id)

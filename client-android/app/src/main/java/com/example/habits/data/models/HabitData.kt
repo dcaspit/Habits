@@ -6,17 +6,19 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.util.Date
 
 @Entity(tableName = "habits_table")
 @Parcelize
 data class HabitData(
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "intervals") val interval: Int,
-    @ColumnInfo(name = "date_created") val dateCreated: String,
-    @ColumnInfo(name = "color") val color: Int,
-    @ColumnInfo(name = "type") val type: Int,
+    @ColumnInfo(name = "title") val name: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "frequency") val frequency: String, // Can be "daily", "weekly", "monthly", or "custom"
+    @ColumnInfo(name = "start_date") val startDate: String,
+    @ColumnInfo(name = "end_date") val endDate: String?,
+    @ColumnInfo(name = "track_days") val trackDays: String,
     @ColumnInfo(name = "reminder") val reminder: String? = null,
     @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "habit_id") val id: Int? = null,
 ): Parcelable

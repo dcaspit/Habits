@@ -44,9 +44,9 @@ class DetailsFragment: Fragment() {
             val habit = mDatabaseViewModel.getHabitById(args.habitId)
 
             habit.observe(viewLifecycleOwner) {
-                binding.text.text = it.title
+                binding.text.text = it.name
                 val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-                actionBar?.title = it.title
+                actionBar?.title = it.name
                 actionBar?.setDisplayHomeAsUpEnabled(true)
             }
 
