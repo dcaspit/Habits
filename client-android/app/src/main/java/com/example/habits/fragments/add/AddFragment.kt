@@ -51,53 +51,65 @@ class AddFragment : Fragment() {
     ): View {
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
 
-        makeSharedStateForTheButtons()
-        whenAddClickedMakeSureToCalculateAllSelectedButtons()
-
         mAddViewModel.days.observe(viewLifecycleOwner) {
+            if(it.isEmpty()) return@observe
+
+            val color = getPrimaryColor(context)
+            binding.monday.turnOff()
+            binding.thesday.turnOff()
+            binding.wednesday.turnOff()
+            binding.thursday.turnOff()
+            binding.friday.turnOff()
+            binding.saturday.turnOff()
+            binding.sunday.turnOff()
+
             it.forEach { day ->
                 when (day) {
                     DayOfWeek.MONDAY -> {
-                        binding.monday.callOnClick()
+                        binding.monday.turnOn(color)
                     }
+
                     DayOfWeek.TUESDAY -> {
-                        binding.thesday.callOnClick()
+                        binding.thesday.turnOn(color)
                     }
+
                     DayOfWeek.WEDNESDAY -> {
-                        binding.wednesday.callOnClick()
+                        binding.wednesday.turnOn(color)
                     }
+
                     DayOfWeek.THURSDAY -> {
-                        binding.thursday.callOnClick()
+                        binding.thursday.turnOn(color)
                     }
+
                     DayOfWeek.FRIDAY -> {
-                        binding.friday.callOnClick()
+                        binding.friday.turnOn(color)
                     }
+
                     DayOfWeek.SATURDAY -> {
-                        binding.saturday.callOnClick()
+                        binding.saturday.turnOn(color)
                     }
+
                     DayOfWeek.SUNDAY -> {
-                        binding.sunday.callOnClick()
+                        binding.sunday.turnOn(color)
                     }
                 }
             }
         }
 
         with(binding) {
-            monday.addClickListener()
-            thesday.addClickListener()
-            wednesday.addClickListener()
-            thursday.addClickListener()
-            friday.addClickListener()
-            saturday.addClickListener()
-            sunday.addClickListener()
-            morning.addClickListener()
-            afternoon.addClickListener()
-            evening.addClickListener()
+            monday.addClickListener(DayOfWeek.MONDAY)
+            thesday.addClickListener(DayOfWeek.TUESDAY)
+            wednesday.addClickListener(DayOfWeek.WEDNESDAY)
+            thursday.addClickListener(DayOfWeek.THURSDAY)
+            friday.addClickListener(DayOfWeek.FRIDAY)
+            saturday.addClickListener(DayOfWeek.SATURDAY)
+            sunday.addClickListener(DayOfWeek.SUNDAY)
+//            morning.addClickListener(DayOfWeek.MONDAY)
+//            afternoon.addClickListener(DayOfWeek.MONDAY)
+//            evening.addClickListener(DayOfWeek.MONDAY)
 
-            repeatEveryDayCheckbox.addClickListener(
-                monday, thesday, wednesday, thursday, friday, saturday, sunday
-            )
-            repeatDailyInCheckbox.addClickListener(morning, afternoon, evening)
+            repeatEveryDayCheckbox.addClickListener()
+            //repeatDailyInCheckbox.addClickListener(morning, afternoon, evening)
         }
 
         binding.buttonAdd.setOnClickListener {
@@ -122,28 +134,52 @@ class AddFragment : Fragment() {
         return binding.root
     }
 
-    private fun MaterialCheckBox.addClickListener(vararg buttons: MaterialButton) {
-        val color = getPrimaryColor(context)
+    private fun MaterialCheckBox.addClickListener() {
         addOnCheckedStateChangedListener { _, state ->
-            buttons.forEachIndexed { i, button ->
-                if (state == MaterialCheckBox.STATE_CHECKED) {
-                    button.backgroundTintList = ColorStateList.valueOf(color)
-                } else if (i != 0) {
-                    button.backgroundTintList = null
-                }
+            if (state == MaterialCheckBox.STATE_CHECKED) {
+                mAddViewModel.setDays(
+                    mutableSetOf(
+                        DayOfWeek.MONDAY,
+                        DayOfWeek.TUESDAY,
+                        DayOfWeek.WEDNESDAY,
+                        DayOfWeek.THURSDAY,
+                        DayOfWeek.FRIDAY,
+                        DayOfWeek.SATURDAY,
+                        DayOfWeek.SUNDAY
+                    )
+                )
+            }
+            else {
+                mAddViewModel.setDays(
+                    mutableSetOf(
+                        DayOfWeek.MONDAY,
+                    )
+                )
             }
         }
     }
 
-    private fun MaterialButton.addClickListener() {
+    private fun MaterialButton.addClickListener(dayOfWeek: DayOfWeek) {
         val color = getPrimaryColor(context)
         setOnClickListener {
-            backgroundTintList = if (backgroundTintList == null) {
-                ColorStateList.valueOf(color)
-            } else {
-                null
-            }
+            toggleButton(color, dayOfWeek)
         }
+    }
+
+    private fun MaterialButton.toggleButton(color: Int, dayOfWeek: DayOfWeek) {
+        if (backgroundTintList == null) {
+            turnOn(color)
+        } else {
+            turnOff()
+        }
+    }
+
+    private fun MaterialButton.turnOff() {
+        backgroundTintList = null
+    }
+
+    private fun MaterialButton.turnOn(color: Int) {
+        backgroundTintList = ColorStateList.valueOf(color)
     }
 
     override fun onDestroyView() {

@@ -19,6 +19,12 @@ class AddViewModel: ViewModel(){
     val days: LiveData<MutableSet<DayOfWeek>>
         get() = _days
 
+    fun setDays(days: MutableSet<DayOfWeek>) {
+        viewModelScope.launch {
+            _days.postValue(days)
+        }
+    }
+
     fun addDay(dayOfWeek: DayOfWeek) {
         viewModelScope.launch {
             _days.value?.let {
