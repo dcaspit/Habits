@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioGroup
-import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,23 +23,19 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 
 enum class HabitGoal {
-    NONE,
-    NUMERIC,
-    DURATION
+    NONE, NUMERIC, DURATION
 }
 
-enum class RepeatDaily {
+enum class RepeatDailyIn {
     MORNING, AFTERNOON, EVENING
 }
 
 class AddFragment : Fragment() {
-
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
     private val mAddViewModel: AddViewModel by viewModels()
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
-
     private val titleRes: Int = R.string.add_habit_title
 
     override fun onStart() {
@@ -118,18 +112,18 @@ class AddFragment : Fragment() {
     }
 
     private fun addRepeatDailysClickListeners() {
-        binding.morning.addRepeatDailyClickListener(RepeatDaily.MORNING)
-        binding.afternoon.addRepeatDailyClickListener(RepeatDaily.AFTERNOON)
-        binding.evening.addRepeatDailyClickListener(RepeatDaily.EVENING)
+        binding.morning.addRepeatDailyClickListener(RepeatDailyIn.MORNING)
+        binding.afternoon.addRepeatDailyClickListener(RepeatDailyIn.AFTERNOON)
+        binding.evening.addRepeatDailyClickListener(RepeatDailyIn.EVENING)
         binding.repeatDailyInCheckbox.addRepeatDailtDayCheckboxClickListener()
     }
 
     private fun setAddButtonClickListener() {
         binding.buttonAdd.setOnClickListener {
-            val stringBuilder = StringBuilder()
+            val days = StringBuilder()
             mAddViewModel.days.value?.forEach {
-                stringBuilder.append(it)
-                stringBuilder.append(",")
+                days.append(it)
+                days.append(",")
             }
 
             mDatabaseViewModel.insertHabit(
@@ -139,7 +133,7 @@ class AddFragment : Fragment() {
                     "daily",
                     localDateToString(LocalDate.now()),
                     null,
-                    stringBuilder.toString()
+                    days.toString()
                 )
             )
             findNavController().popBackStack()
@@ -205,7 +199,7 @@ class AddFragment : Fragment() {
     }
 
     private fun observeRepeatDailys() {
-        mAddViewModel.repeatDaily.observe(viewLifecycleOwner) {
+        mAddViewModel.repeatDailyIn.observe(viewLifecycleOwner) {
             if (it.isEmpty()) return@observe
 
             val color = getPrimaryColor(context)
@@ -215,15 +209,15 @@ class AddFragment : Fragment() {
 
             it.forEach { repeatDaily ->
                 when (repeatDaily) {
-                    RepeatDaily.MORNING -> {
+                    RepeatDailyIn.MORNING -> {
                         binding.morning.turnOn(color)
                     }
 
-                    RepeatDaily.AFTERNOON -> {
+                    RepeatDailyIn.AFTERNOON -> {
                         binding.afternoon.turnOn(color)
                     }
 
-                    RepeatDaily.EVENING -> {
+                    RepeatDailyIn.EVENING -> {
                         binding.evening.turnOn(color)
                     }
                 }
@@ -260,15 +254,15 @@ class AddFragment : Fragment() {
             if (state == MaterialCheckBox.STATE_CHECKED) {
                 mAddViewModel.setRepeatDailys(
                     mutableSetOf(
-                        RepeatDaily.MORNING,
-                        RepeatDaily.AFTERNOON,
-                        RepeatDaily.EVENING,
+                        RepeatDailyIn.MORNING,
+                        RepeatDailyIn.AFTERNOON,
+                        RepeatDailyIn.EVENING,
                     )
                 )
             } else {
                 mAddViewModel.setRepeatDailys(
                     mutableSetOf(
-                        RepeatDaily.MORNING,
+                        RepeatDailyIn.MORNING,
                     )
                 )
             }
@@ -282,20 +276,20 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun MaterialButton.addRepeatDailyClickListener(repeatDaily: RepeatDaily) {
+    private fun MaterialButton.addRepeatDailyClickListener(repeatDailyIn: RepeatDailyIn) {
         val color = getPrimaryColor(context)
         setOnClickListener {
-            toggleRepeatDailyButton(color, repeatDaily)
+            toggleRepeatDailyButton(color, repeatDailyIn)
         }
     }
 
-    private fun MaterialButton.toggleRepeatDailyButton(color: Int, repeatDaily: RepeatDaily) {
+    private fun MaterialButton.toggleRepeatDailyButton(color: Int, repeatDailyIn: RepeatDailyIn) {
         if (backgroundTintList == null) {
             turnOn(color)
-            mAddViewModel.addRepeatDaily(repeatDaily)
+            mAddViewModel.addRepeatDaily(repeatDailyIn)
         } else {
             turnOff()
-            mAddViewModel.removeRepeatDaily(repeatDaily)
+            mAddViewModel.removeRepeatDaily(repeatDailyIn)
         }
     }
 

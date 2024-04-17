@@ -23,9 +23,9 @@ class AddViewModel: ViewModel(){
     val days: LiveData<MutableSet<DayOfWeek>>
         get() = _days
 
-    private var _repeatDaily = MutableLiveData<MutableSet<RepeatDaily>>(mutableSetOf())
-    val repeatDaily: LiveData<MutableSet<RepeatDaily>>
-        get() = _repeatDaily
+    private var _repeatDailyIn = MutableLiveData<MutableSet<RepeatDailyIn>>(mutableSetOf())
+    val repeatDailyIn: LiveData<MutableSet<RepeatDailyIn>>
+        get() = _repeatDailyIn
 
     fun setHabitGoal(habitGoal: HabitGoal) {
         viewModelScope.launch {
@@ -33,26 +33,26 @@ class AddViewModel: ViewModel(){
         }
     }
 
-    fun setRepeatDailys(repeatDailys: MutableSet<RepeatDaily>) {
+    fun setRepeatDailys(repeatDailyIns: MutableSet<RepeatDailyIn>) {
         viewModelScope.launch {
-            _repeatDaily.postValue(repeatDailys)
+            _repeatDailyIn.postValue(repeatDailyIns)
         }
     }
 
-    fun addRepeatDaily(repeatDaily: RepeatDaily) {
+    fun addRepeatDaily(repeatDailyIn: RepeatDailyIn) {
         viewModelScope.launch {
-            _repeatDaily.value?.let {
-                it.add(repeatDaily)
-                _repeatDaily.postValue(it)
+            _repeatDailyIn.value?.let {
+                it.add(repeatDailyIn)
+                _repeatDailyIn.postValue(it)
             }
         }
     }
 
-    fun removeRepeatDaily(repeatDaily: RepeatDaily) {
+    fun removeRepeatDaily(repeatDailyIn: RepeatDailyIn) {
         viewModelScope.launch {
-            _repeatDaily.value?.let {
-                it.remove(repeatDaily)
-                _repeatDaily.postValue(it)
+            _repeatDailyIn.value?.let {
+                it.remove(repeatDailyIn)
+                _repeatDailyIn.postValue(it)
             }
         }
     }
