@@ -1,7 +1,6 @@
 package com.example.habits.fragments.details
 
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.habits.R
+import com.example.habits.data.models.HabitAction
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentDetailsBinding
 import com.example.habits.fragments.add.HabitGoal
+import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
 import com.example.habits.utils.makeVisible
+import java.time.LocalDate
 
 class DetailsFragment: Fragment() {
 
@@ -60,7 +62,7 @@ class DetailsFragment: Fragment() {
             actionBar?.title = it.name
             actionBar?.setDisplayHomeAsUpEnabled(true)
 
-            setHabitProgressBar(it.habitGoal)
+            setHabitProgressBar(it.habitType)
         }
 
         return binding.root
@@ -79,8 +81,6 @@ class DetailsFragment: Fragment() {
             }
         }
 
-
-
         if (type == HabitGoal.NONE.ordinal.toString()) {
             binding.progressIndicator.max = 1
             binding.progressText.text = "0/1"
@@ -96,7 +96,14 @@ class DetailsFragment: Fragment() {
                 binding.progressIndicator.progress = addition.toInt()
                 binding.textFieldName.setText("")
                 binding.textFieldName.clearFocus()
-                //mDatabaseViewModel.trackHabit()
+                binding.actionContainer.makeGone()
+                mDatabaseViewModel.trackHabit(HabitAction(
+                    args.habitId,
+                    localDateToString(LocalDate.now()),
+                    habitGoal,
+                    (addition.toInt() == count.toInt()),
+                    addition.toInt()
+                ))
             }
         }
 
@@ -105,7 +112,14 @@ class DetailsFragment: Fragment() {
             binding.progressIndicator.progress = count.toInt()
             binding.textFieldName.setText("")
             binding.textFieldName.clearFocus()
-            //mDatabaseViewModel.trackHabit()
+            binding.actionContainer.makeGone()
+            mDatabaseViewModel.trackHabit(HabitAction(
+                args.habitId,
+                localDateToString(LocalDate.now()),
+                habitGoal,
+                true,
+                count.toInt()
+            ))
         }
 
         binding.progressIndicator.setProgress(0, true)

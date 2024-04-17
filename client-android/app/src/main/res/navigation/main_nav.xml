@@ -33,6 +33,9 @@
         <argument
             android:name="habitId"
             app:argType="integer" />
+        <argument
+            android:name="selectedDate"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"

@@ -6,9 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.habits.data.HabitsDatabase
+import com.example.habits.data.models.HabitAction
 import com.example.habits.data.models.HabitData
 import com.example.habits.data.repository.HabitRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(application: Application) : AndroidViewModel(application) {
@@ -16,13 +19,18 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     private val habitDao = HabitsDatabase.getDatabase(application).habitDao()
     private val repository: HabitRepository = HabitRepository(habitDao)
 
-    private val _habits = MutableLiveData<List<HabitData>>()
-    val habits: LiveData<List<HabitData>>
+    private val _habits = MutableLiveData<HashMap<HabitData, List<HabitAction>>>()
+    val habits: LiveData<HashMap<HabitData, List<HabitAction>>>
         get() = _habits
 
     fun getAllHabits() {
         viewModelScope.launch(Dispatchers.IO) {
-           _habits.postValue(habitDao.getAllHabits())
+            val hashMap = hashMapOf<HabitData, List<HabitAction>>()
+            val allHabits = habitDao.getAllHabits()
+            allHabits.forEach {
+                hashMap[it] = getHabitActions(it.id!!)
+            }
+            _habits.postValue(hashMap)
         }
     }
 
@@ -34,6 +42,16 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
 
     fun getHabitById(id: Int): LiveData<HabitData> {
         return repository.getHabitById(id)
+    }
+
+    fun trackHabit(habitAction: HabitAction) {
+        viewModelScope.launch(Dispatchers.IO) {
+            habitDao.insertHabitAction(habitAction)
+        }
+    }
+
+    fun getHabitActions(habitId: Int): List<HabitAction> {
+        return habitDao.getHabitActions(habitId)
     }
 
     fun updataHabit(habitData: HabitData) {

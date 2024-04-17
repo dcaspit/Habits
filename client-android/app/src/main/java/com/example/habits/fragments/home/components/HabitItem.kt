@@ -3,25 +3,24 @@ package com.example.habits.fragments.home.components
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.databinding.HabitItemBinding
 import com.example.habits.fragments.home.HomeFragmentDirections
 import com.example.habits.data.baseObjects.BaseItem
+import com.example.habits.data.models.HabitAction
 import com.example.habits.fragments.home.adapters.HabitItemHorizontalRecyclerAdapter
 import com.example.habits.data.models.HabitData
-import com.example.habits.data.models.HabitDate
-import com.example.habits.data.models.HabitIntervals
 import com.example.habits.fragments.add.HabitGoal
 import com.example.habits.utils.makeGone
+import java.time.LocalDate
 
-class HabitItem(val habitData: HabitData) : BaseItem() {
+class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val selectedData: LocalDate) : BaseItem() {
 
     override val viewType: Int = HABIT
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
-            holder.bind(habitData)
+            holder.bind(habitData, habitAction, selectedData)
         }
     }
 
@@ -30,15 +29,15 @@ class HabitItem(val habitData: HabitData) : BaseItem() {
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private val adapter: HabitItemHorizontalRecyclerAdapter by lazy { HabitItemHorizontalRecyclerAdapter() }
-        fun bind(habitData: HabitData) {
+        fun bind(habitData: HabitData, habitAction: HabitAction?, selectedData: LocalDate) {
             binding.habitName.text = habitData.name
             binding.habitInterval.text = habitData.frequency
 
-            setHabitProgressBar(habitData.habitGoal)
+            setHabitProgressBar(habitAction)
 
             binding.root.setOnClickListener {
                 val action = habitData.id?.let { id ->
-                    HomeFragmentDirections.actionHomePageToDetailsPage(id)
+                    HomeFragmentDirections.actionHomePageToDetailsPage(id, selectedData.toString())
                 }
                 if (action != null) {
                     binding.root.findNavController().navigate(action)
@@ -46,8 +45,12 @@ class HabitItem(val habitData: HabitData) : BaseItem() {
             }
         }
 
-        private fun setHabitProgressBar(habitGoal: String) {
-            val (type, count) = habitGoal.split(",")
+        private fun setHabitProgressBar(habitAction: HabitAction?) {
+            val types = habitAction?.habitType?.split(",") ?: return
+
+            val type = types[0]
+            val count = types[1]
+
             if (type.isEmpty()) {
                 binding.progressIndicator.makeGone()
                 binding.progressText.makeGone()
@@ -56,12 +59,17 @@ class HabitItem(val habitData: HabitData) : BaseItem() {
 
             if (type == HabitGoal.NONE.ordinal.toString()) {
                 binding.progressIndicator.max = 1
-                binding.progressText.text = "0/1"
+                if(habitAction.completed) {
+                    binding.progressText.text = "1/1"
+                    binding.progressIndicator.setProgress(1, true)
+                } else{
+                    binding.progressText.text = "0/1"
+                }
             } else if (count.isNotEmpty()) {
                 binding.progressIndicator.max = count.toInt()
-                binding.progressText.text = "0/$count"
+                binding.progressIndicator.setProgress(habitAction.partialAmount, true)
+                binding.progressText.text = "${habitAction.partialAmount}/$count"
             }
-            binding.progressIndicator.setProgress(0, true)
         }
     }
 

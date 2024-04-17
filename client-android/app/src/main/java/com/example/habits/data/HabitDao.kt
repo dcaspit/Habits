@@ -29,9 +29,15 @@ interface HabitDao {
     fun deleteHabit(habitData: HabitData)
 
     @Query("SELECT * FROM habits_actions_table WHERE habit_id = :habitId ")
-    fun getHabitActions(habitId: Int): LiveData<List<HabitAction>>
+    fun getHabitActions(habitId: Int): List<HabitAction>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHabitAction(habit: HabitAction)
+
+    @Update
+    fun updateHabitAction(habit: HabitAction)
+
+    @Delete
+    fun deleteHabit(habit: HabitAction)
 
 }

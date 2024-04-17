@@ -23,6 +23,7 @@ import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.displayText
 import com.example.habits.utils.getColorCompat
 import com.example.habits.utils.getPrimaryColor
+import com.example.habits.utils.localDateToString
 import com.example.habits.utils.stringToLocalDate
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.WeekDay
@@ -30,6 +31,8 @@ import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -75,9 +78,12 @@ class HomeFragment : Fragment() {
     private fun observeHabits() {
         mDatabaseViewModel.habits.observe(viewLifecycleOwner) {
             if (it.isEmpty()) return@observe
-            val todayHabits = it.filter { habitData -> shouldTrackHabitToday(habitData) }
+            val todayHabits = it.filter { tupple -> shouldTrackHabitToday(tupple.key) }
             if (todayHabits.isEmpty()) return@observe
-            baseRecyclerAdapter.setData(todayHabits.map { habit -> HabitItem(habit) })
+            val items = todayHabits.map { tupple ->
+                    HabitItem(tupple.key, tupple.value.find { action -> action.dateCreated == localDateToString(selectedDate) }, selectedDate)
+            }
+            baseRecyclerAdapter.setData(items)
             binding.recyclerView.scheduleLayoutAnimation()
         }
     }
