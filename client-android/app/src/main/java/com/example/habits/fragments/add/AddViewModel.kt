@@ -8,7 +8,7 @@ import com.example.habits.data.models.HabitData
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 
-class AddViewModel: ViewModel(){
+class AddViewModel : ViewModel() {
     private var _canSave = MutableLiveData(false)
     val canSave: LiveData<Boolean>
         get() = _canSave
@@ -17,7 +17,17 @@ class AddViewModel: ViewModel(){
     val habitGoal: LiveData<HabitGoal>
         get() = _habitGoal
 
-    private var _days = MutableLiveData<MutableSet<DayOfWeek>>(mutableSetOf())
+    private var _days = MutableLiveData(
+        mutableSetOf(
+            DayOfWeek.MONDAY,
+            DayOfWeek.TUESDAY,
+            DayOfWeek.WEDNESDAY,
+            DayOfWeek.THURSDAY,
+            DayOfWeek.FRIDAY,
+            DayOfWeek.SATURDAY,
+            DayOfWeek.SUNDAY
+        )
+    )
     val days: LiveData<MutableSet<DayOfWeek>>
         get() = _days
 
