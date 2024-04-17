@@ -85,7 +85,7 @@ class AddFragment : Fragment() {
             if (state == MaterialCheckBox.STATE_CHECKED) {
                 mAddViewModel.setHabitGoal(HabitGoal.NUMERIC)
             } else {
-                mAddViewModel.setHabitGoal(HabitGoal.DURATION)
+                mAddViewModel.setHabitGoal(HabitGoal.NONE)
             }
         }
     }
