@@ -19,6 +19,8 @@ data class HabitData(
     @ColumnInfo(name = "start_date") val startDate: String,
     @ColumnInfo(name = "end_date") val endDate: String?,
     @ColumnInfo(name = "track_days") val trackDays: String,
+    @ColumnInfo(name = "habit_goal") val habitGoal: String, // String will in format of: "type,count". examples: "0" "1,50" "2,20". types: "0"=NONE, "1"=NUMERIC, "2"=DURATION
+    @ColumnInfo(name = "repeat_daily_in") val repeatDailyIn: String,
     @ColumnInfo(name = "reminder") val reminder: String? = null,
     @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "habit_id") val id: Int? = null,
 ): Parcelable

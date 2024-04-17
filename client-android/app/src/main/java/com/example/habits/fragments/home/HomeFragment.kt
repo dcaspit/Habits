@@ -1,30 +1,17 @@
 package com.example.habits.fragments.home
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habits.MainActivity
 import com.example.habits.R
 import com.example.habits.data.baseObjects.BaseRecyclerAdapter
 import com.example.habits.data.models.HabitData
@@ -36,24 +23,16 @@ import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.displayText
 import com.example.habits.utils.getColorCompat
 import com.example.habits.utils.getPrimaryColor
-import com.example.habits.utils.makeGone
 import com.example.habits.utils.stringToLocalDate
 import com.google.android.material.snackbar.Snackbar
-import com.kizitonwose.calendar.core.Week
 import com.kizitonwose.calendar.core.WeekDay
 import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
-import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
-import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Month
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.time.temporal.ChronoUnit
-import java.util.Locale
 
 class HomeFragment : Fragment() {
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
@@ -82,7 +61,7 @@ class HomeFragment : Fragment() {
             mDatabaseViewModel.getAllHabits()
 
             binding.floatingActionButton.setOnClickListener {
-                val action =  HomeFragmentDirections.actionHomePageToAddFragment()
+                val action = HomeFragmentDirections.actionHomePageToAddFragment()
                 binding.root.findNavController().navigate(action)
             }
 
@@ -95,15 +74,15 @@ class HomeFragment : Fragment() {
 
     private fun observeHabits() {
         mDatabaseViewModel.habits.observe(viewLifecycleOwner) {
-            if(it.isEmpty()) return@observe
-            val filtered = it.filter { habitData -> shouldTrackHabitToday(habitData) }
-            if(filtered.isEmpty()) return@observe
-            baseRecyclerAdapter.setData(filtered.map { habit -> HabitItem(habit) })
+            if (it.isEmpty()) return@observe
+            val todayHabits = it.filter { habitData -> shouldTrackHabitToday(habitData) }
+            if (todayHabits.isEmpty()) return@observe
+            baseRecyclerAdapter.setData(todayHabits.map { habit -> HabitItem(habit) })
             binding.recyclerView.scheduleLayoutAnimation()
         }
     }
 
-    fun shouldTrackHabitToday(habit: HabitData): Boolean {
+    private fun shouldTrackHabitToday(habit: HabitData): Boolean {
         val startDate = stringToLocalDate(habit.startDate)
 
         // Check if the current date is within the habit's start and end dates
@@ -206,8 +185,7 @@ class HomeFragment : Fragment() {
 
     private fun restoreDeletedData(view: View, deletedItem: HabitData) {
         val snackBar = Snackbar.make(
-            view, "Deleted '${deletedItem.name}'",
-            Snackbar.LENGTH_LONG
+            view, "Deleted '${deletedItem.name}'", Snackbar.LENGTH_LONG
         )
         snackBar.setAction("Undo") {
             mDatabaseViewModel.insertHabit(deletedItem)

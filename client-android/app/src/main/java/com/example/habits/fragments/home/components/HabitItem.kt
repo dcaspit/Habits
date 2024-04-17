@@ -31,6 +31,9 @@ class HabitItem(val habitData: HabitData) : BaseItem() {
         fun bind(habitData: HabitData) {
             binding.habitName.text = habitData.name
             binding.habitInterval.text = habitData.frequency
+            binding.progressIndicator.setProgress(0, true)
+            binding.progressText.text = "0/10"
+
             binding.root.setOnClickListener {
                 val action = habitData.id?.let { id ->
                     HomeFragmentDirections.actionHomePageToDetailsPage(id)

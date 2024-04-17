@@ -126,6 +126,31 @@ class AddFragment : Fragment() {
                 days.append(",")
             }
 
+            val habitGoal = StringBuilder()
+            when(mAddViewModel.habitGoal.value) {
+                HabitGoal.NONE -> {
+                    habitGoal.append(HabitGoal.NONE.ordinal.toString())
+                    habitGoal.append(",")
+                }
+                HabitGoal.NUMERIC -> {
+                    habitGoal.append(HabitGoal.NUMERIC.ordinal.toString())
+                    habitGoal.append(",")
+                    habitGoal.append(binding.textFieldGoalForHabit.text)
+                }
+                HabitGoal.DURATION -> {
+                    habitGoal.append(HabitGoal.DURATION.ordinal.toString())
+                    habitGoal.append(",")
+                    habitGoal.append(binding.textFieldGoalForHabit.text)
+                }
+                null -> {}
+            }
+
+            val repeatDailyIn = StringBuilder()
+            mAddViewModel.repeatDailyIn.value?.forEach { dailyIn ->
+                repeatDailyIn.append(dailyIn.name)
+                repeatDailyIn.append(",")
+            }
+
             mDatabaseViewModel.insertHabit(
                 HabitData(
                     binding.textFieldName.text.toString(),
@@ -133,7 +158,9 @@ class AddFragment : Fragment() {
                     "daily",
                     localDateToString(LocalDate.now()),
                     null,
-                    days.toString()
+                    days.toString(),
+                    habitGoal.toString(),
+                    repeatDailyIn.toString()
                 )
             )
             findNavController().popBackStack()
