@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
+import android.widget.RadioGroup.OnCheckedChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,10 +17,18 @@ import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
 import com.example.habits.utils.getPrimaryColor
 import com.example.habits.utils.localDateToString
+import com.example.habits.utils.makeGone
+import com.example.habits.utils.makeVisible
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import java.time.DayOfWeek
 import java.time.LocalDate
+
+enum class HabitGoal {
+    NONE,
+    NUMERIC,
+    DURATION
+}
 
 enum class RepeatDaily {
     MORNING, AFTERNOON, EVENING
@@ -51,6 +61,8 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
+        observeHabitGoal()
+        addHabitGoalsClickListeners()
 
         observeDays()
         addDaysClickListeners()
@@ -60,6 +72,49 @@ class AddFragment : Fragment() {
 
         setAddButtonClickListener()
         return binding.root
+    }
+
+    private fun addHabitGoalsClickListeners() {
+        binding.goalTimeButton.setOnClickListener {
+            mAddViewModel.setHabitGoal(HabitGoal.DURATION)
+        }
+        binding.goalNumberButton.setOnClickListener {
+            mAddViewModel.setHabitGoal(HabitGoal.NUMERIC)
+        }
+        binding.goalForHabitCheckbox.addOnCheckedStateChangedListener { _, state ->
+            if (state == MaterialCheckBox.STATE_CHECKED) {
+                mAddViewModel.setHabitGoal(HabitGoal.NUMERIC)
+            } else {
+                mAddViewModel.setHabitGoal(HabitGoal.DURATION)
+            }
+        }
+    }
+
+    private fun observeHabitGoal() {
+        mAddViewModel.habitGoal.observe(viewLifecycleOwner) {
+            if (it == null) return@observe
+            when (it) {
+                HabitGoal.NONE -> {
+                    binding.llGoalForHabit.makeGone()
+                    binding.goalTimeButton.turnOff()
+                    binding.goalNumberButton.turnOff()
+                }
+
+                HabitGoal.NUMERIC -> {
+                    binding.llGoalForHabit.makeVisible()
+                    binding.goalTimeButton.turnOff()
+                    binding.goalNumberButton.turnOn(getPrimaryColor(context))
+                    binding.textFieldGoalForHabit.hint = "0 times"
+                }
+
+                HabitGoal.DURATION -> {
+                    binding.llGoalForHabit.makeVisible()
+                    binding.goalNumberButton.turnOff()
+                    binding.goalTimeButton.turnOn(getPrimaryColor(context))
+                    binding.textFieldGoalForHabit.hint = "0 minutes"
+                }
+            }
+        }
     }
 
     private fun addRepeatDailysClickListeners() {

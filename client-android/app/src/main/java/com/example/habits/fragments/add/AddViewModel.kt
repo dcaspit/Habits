@@ -15,6 +15,10 @@ class AddViewModel: ViewModel(){
     val canSave: LiveData<Boolean>
         get() = _canSave
 
+    private var _habitGoal = MutableLiveData(HabitGoal.NONE)
+    val habitGoal: LiveData<HabitGoal>
+        get() = _habitGoal
+
     private var _days = MutableLiveData<MutableSet<DayOfWeek>>(mutableSetOf())
     val days: LiveData<MutableSet<DayOfWeek>>
         get() = _days
@@ -22,6 +26,12 @@ class AddViewModel: ViewModel(){
     private var _repeatDaily = MutableLiveData<MutableSet<RepeatDaily>>(mutableSetOf())
     val repeatDaily: LiveData<MutableSet<RepeatDaily>>
         get() = _repeatDaily
+
+    fun setHabitGoal(habitGoal: HabitGoal) {
+        viewModelScope.launch {
+            _habitGoal.postValue(habitGoal)
+        }
+    }
 
     fun setRepeatDailys(repeatDailys: MutableSet<RepeatDaily>) {
         viewModelScope.launch {
