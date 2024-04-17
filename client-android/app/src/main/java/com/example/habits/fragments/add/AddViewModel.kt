@@ -19,6 +19,34 @@ class AddViewModel: ViewModel(){
     val days: LiveData<MutableSet<DayOfWeek>>
         get() = _days
 
+    private var _repeatDaily = MutableLiveData<MutableSet<RepeatDaily>>(mutableSetOf())
+    val repeatDaily: LiveData<MutableSet<RepeatDaily>>
+        get() = _repeatDaily
+
+    fun setRepeatDailys(repeatDailys: MutableSet<RepeatDaily>) {
+        viewModelScope.launch {
+            _repeatDaily.postValue(repeatDailys)
+        }
+    }
+
+    fun addRepeatDaily(repeatDaily: RepeatDaily) {
+        viewModelScope.launch {
+            _repeatDaily.value?.let {
+                it.add(repeatDaily)
+                _repeatDaily.postValue(it)
+            }
+        }
+    }
+
+    fun removeRepeatDaily(repeatDaily: RepeatDaily) {
+        viewModelScope.launch {
+            _repeatDaily.value?.let {
+                it.remove(repeatDaily)
+                _repeatDaily.postValue(it)
+            }
+        }
+    }
+
     fun setDays(days: MutableSet<DayOfWeek>) {
         viewModelScope.launch {
             _days.postValue(days)
