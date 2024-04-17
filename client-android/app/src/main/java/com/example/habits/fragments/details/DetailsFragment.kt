@@ -11,10 +11,14 @@ import androidx.navigation.fragment.navArgs
 import com.example.habits.R
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentDetailsBinding
+import com.example.habits.fragments.add.HabitGoal
+import com.example.habits.utils.makeGone
+import com.example.habits.utils.makeVisible
 
 class DetailsFragment: Fragment() {
 
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
+    private val detailsViewModel: DetailsViewModel by viewModels()
 
     private val args : DetailsFragmentArgs by navArgs()
 
@@ -37,23 +41,55 @@ class DetailsFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        try {
-            _binding = FragmentDetailsBinding.inflate(layoutInflater, container, false)
+    ): View {
+        _binding = FragmentDetailsBinding.inflate(layoutInflater, container, false)
 
-            val habit = mDatabaseViewModel.getHabitById(args.habitId)
+        val habit = mDatabaseViewModel.getHabitById(args.habitId)
 
-            habit.observe(viewLifecycleOwner) {
-                binding.text.text = it.name
-                val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-                actionBar?.title = it.name
-                actionBar?.setDisplayHomeAsUpEnabled(true)
+        detailsViewModel.trackVisible.observe(viewLifecycleOwner) {
+            if(it) {
+                binding.trackContainer.makeVisible()
+            } else {
+                binding.trackContainer.makeGone()
             }
-
-            return binding.root
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
-        return null;
+
+        habit.observe(viewLifecycleOwner) {
+            val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+            actionBar?.title = it.name
+            actionBar?.setDisplayHomeAsUpEnabled(true)
+
+            setHabitProgressBar(it.habitGoal)
+        }
+
+        return binding.root
+    }
+
+    private fun setHabitProgressBar(habitGoal: String) {
+        val (type, count) = habitGoal.split(",")
+        if (type.isEmpty()) {
+            binding.trackCard.makeGone()
+            return
+        }
+
+        binding.mainTrackButton.setOnClickListener {
+            detailsViewModel.trackVisible.value?.let { track ->
+                detailsViewModel.setTrackVisible(!track)
+            }
+        }
+
+        if (type == HabitGoal.NONE.ordinal.toString()) {
+            binding.progressIndicator.max = 1
+            binding.progressText.text = "0/1"
+            binding.mainTrackButton.makeGone()
+        } else if (count.isNotEmpty()) {
+            binding.progressIndicator.max = count.toInt()
+            binding.progressText.text = "0/$count"
+            binding.mainTrackButton.makeVisible()
+            binding.trackActionButton.setOnClickListener {
+                //mDatabaseViewModel.trackHabit()
+            }
+        }
+        binding.progressIndicator.setProgress(0, true)
     }
 }

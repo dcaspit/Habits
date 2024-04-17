@@ -57,6 +57,7 @@
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/main_track_button"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
@@ -100,7 +101,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/track_button"
+                    android:id="@+id/track_action_button"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginStart="16dp"
@@ -136,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                tools:text="4 times a week"/>
+                android:text="4 times a week"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -153,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                tools:text="Reminder Off"/>
+                android:text="Reminder Off"/>
 
         </com.google.android.material.card.MaterialCardView>
 
