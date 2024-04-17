@@ -71,7 +71,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/round_button"
                 android:text="# of Times"
-                android:textColor="@color/white" />
+                 />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/goal_time_button"
@@ -82,7 +82,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/round_button"
                 android:text="Time"
-                android:textColor="@color/white" />
+                 />
 
         </LinearLayout>
 
@@ -152,7 +152,6 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="M"
-            android:textColor="@color/white"
             android:textSize="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -165,7 +164,7 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="T"
-            android:textColor="@color/white"
+
             android:textSize="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -178,7 +177,7 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="W"
-            android:textColor="@color/white"
+
             android:textSize="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -191,7 +190,7 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="T"
-            android:textColor="@color/white"
+
             android:textSize="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -204,7 +203,7 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="F"
-            android:textColor="@color/white"
+
             android:textSize="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -217,7 +216,7 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="S"
-            android:textColor="@color/white"
+
             android:textSize="16dp" />
 
         <com.google.android.material.button.MaterialButton
@@ -230,7 +229,7 @@
             android:background="@drawable/round_button"
             android:padding="10dp"
             android:text="S"
-            android:textColor="@color/white"
+
             android:textSize="16dp" />
     </LinearLayout>
 
@@ -286,7 +285,7 @@
             android:layout_weight="1"
             android:background="@drawable/round_button"
             android:text="Morning"
-            android:textColor="@color/white" />
+             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/afternoon"
@@ -297,7 +296,7 @@
             android:layout_weight="1"
             android:background="@drawable/round_button"
             android:text="Afternoon"
-            android:textColor="@color/white" />
+             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/evening"
@@ -308,7 +307,7 @@
             android:layout_weight="1"
             android:background="@drawable/round_button"
             android:text="Evening"
-            android:textColor="@color/white" />
+             />
     </LinearLayout>
 
     <View
