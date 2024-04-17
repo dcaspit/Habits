@@ -67,6 +67,7 @@
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/complete_button"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"

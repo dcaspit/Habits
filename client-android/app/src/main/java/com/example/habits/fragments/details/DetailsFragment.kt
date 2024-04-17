@@ -1,6 +1,7 @@
 package com.example.habits.fragments.details
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,7 +67,7 @@ class DetailsFragment: Fragment() {
     }
 
     private fun setHabitProgressBar(habitGoal: String) {
-        val (type, count) = habitGoal.split(",")
+        var (type, count) = habitGoal.split(",")
         if (type.isEmpty()) {
             binding.trackCard.makeGone()
             return
@@ -78,18 +79,35 @@ class DetailsFragment: Fragment() {
             }
         }
 
+
+
         if (type == HabitGoal.NONE.ordinal.toString()) {
             binding.progressIndicator.max = 1
             binding.progressText.text = "0/1"
             binding.mainTrackButton.makeGone()
+            count = "1"
         } else if (count.isNotEmpty()) {
             binding.progressIndicator.max = count.toInt()
             binding.progressText.text = "0/$count"
             binding.mainTrackButton.makeVisible()
             binding.trackActionButton.setOnClickListener {
+                val addition = binding.textFieldName.text.toString()
+                binding.progressText.text = "$addition/$count"
+                binding.progressIndicator.progress = addition.toInt()
+                binding.textFieldName.setText("")
+                binding.textFieldName.clearFocus()
                 //mDatabaseViewModel.trackHabit()
             }
         }
+
+        binding.completeButton.setOnClickListener {
+            binding.progressText.text = "$count/$count"
+            binding.progressIndicator.progress = count.toInt()
+            binding.textFieldName.setText("")
+            binding.textFieldName.clearFocus()
+            //mDatabaseViewModel.trackHabit()
+        }
+
         binding.progressIndicator.setProgress(0, true)
     }
 }
