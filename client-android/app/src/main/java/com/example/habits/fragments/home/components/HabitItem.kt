@@ -33,7 +33,7 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
             binding.habitName.text = habitData.name
             binding.habitInterval.text = habitData.frequency
 
-            setHabitProgressBar(habitAction)
+            setHabitProgressBar(habitData, habitAction)
 
             binding.root.setOnClickListener {
                 val action = habitData.id?.let { id ->
@@ -45,8 +45,8 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
             }
         }
 
-        private fun setHabitProgressBar(habitAction: HabitAction?) {
-            val types = habitAction?.habitType?.split(",") ?: return
+        private fun setHabitProgressBar(habitData: HabitData, habitAction: HabitAction?) {
+            val types = habitAction?.habitType?.split(",") ?: habitData.habitType.split(",")
 
             val type = types[0]
             val count = types[1]
@@ -59,7 +59,7 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
 
             if (type == HabitGoal.NONE.ordinal.toString()) {
                 binding.progressIndicator.max = 1
-                if(habitAction.completed) {
+                if(habitAction != null && habitAction.completed) {
                     binding.progressText.text = "1/1"
                     binding.progressIndicator.setProgress(1, true)
                 } else{
@@ -67,8 +67,13 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
                 }
             } else if (count.isNotEmpty()) {
                 binding.progressIndicator.max = count.toInt()
-                binding.progressIndicator.setProgress(habitAction.partialAmount, true)
-                binding.progressText.text = "${habitAction.partialAmount}/$count"
+                if(habitAction != null) {
+                    binding.progressIndicator.setProgress(habitAction.partialAmount, true)
+                    binding.progressText.text = "${habitAction.partialAmount}/$count"
+                } else {
+                    binding.progressIndicator.setProgress(0, true)
+                    binding.progressText.text = "0/$count"
+                }
             }
         }
     }

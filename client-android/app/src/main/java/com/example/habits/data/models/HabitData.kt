@@ -26,7 +26,7 @@ data class HabitData(
 @Parcelize
 data class HabitAction(
     @ColumnInfo(name = "habit_id") val habitId: Int,
-    @ColumnInfo(name = "date_created") val dateCreated: String,
+    @ColumnInfo(name = "selected_date") val selectedDate: String,
     @ColumnInfo(name = "habit_type") val habitType: String,
     @ColumnInfo(name = "completed") val completed: Boolean,
     @ColumnInfo(name = "partial_amount") val partialAmount: Int,

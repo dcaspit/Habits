@@ -81,7 +81,7 @@ class HomeFragment : Fragment() {
             val todayHabits = it.filter { tupple -> shouldTrackHabitToday(tupple.key) }
             if (todayHabits.isEmpty()) return@observe
             val items = todayHabits.map { tupple ->
-                    HabitItem(tupple.key, tupple.value.find { action -> action.dateCreated == localDateToString(selectedDate) }, selectedDate)
+                    HabitItem(tupple.key, tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }, selectedDate)
             }
             baseRecyclerAdapter.setData(items)
             binding.recyclerView.scheduleLayoutAnimation()

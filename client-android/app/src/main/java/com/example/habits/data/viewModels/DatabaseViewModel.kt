@@ -23,6 +23,10 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     val habits: LiveData<HashMap<HabitData, List<HabitAction>>>
         get() = _habits
 
+    private val _habit = MutableLiveData<Pair<HabitData, List<HabitAction>>>()
+    val habit: LiveData<Pair<HabitData, List<HabitAction>>>
+        get() = _habit
+
     fun getAllHabits() {
         viewModelScope.launch(Dispatchers.IO) {
             val hashMap = hashMapOf<HabitData, List<HabitAction>>()
@@ -40,8 +44,13 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun getHabitById(id: Int): LiveData<HabitData> {
-        return repository.getHabitById(id)
+    fun getHabitById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val habit = repository.getHabitById(id)
+            val habitActions = getHabitActions(id)
+            val pair = Pair(habit, habitActions)
+            _habit.postValue(pair)
+        }
     }
 
     fun trackHabit(habitAction: HabitAction) {
