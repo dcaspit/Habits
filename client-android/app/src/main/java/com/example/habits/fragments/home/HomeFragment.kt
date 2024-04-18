@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.R
+import com.example.habits.data.baseObjects.BaseItem
 import com.example.habits.data.baseObjects.BaseRecyclerAdapter
 import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
@@ -21,10 +22,9 @@ import com.example.habits.databinding.FragmentHomeBinding
 import com.example.habits.fragments.add.RepeatDailyIn
 import com.example.habits.fragments.home.components.EmptyItem
 import com.example.habits.fragments.home.components.HabitItem
+import com.example.habits.fragments.home.components.HomeTitle
 import com.example.habits.utils.displayText
-import com.example.habits.utils.getColorCompat
 import com.example.habits.utils.getPrimaryColor
-import com.example.habits.utils.localDateToString
 import com.example.habits.utils.stringToLocalDate
 import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendar.core.WeekDay
@@ -32,8 +32,6 @@ import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import com.kizitonwose.calendar.view.ViewContainer
 import com.kizitonwose.calendar.view.WeekDayBinder
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -82,27 +80,83 @@ class HomeFragment : Fragment() {
             val todayHabits = it.filter { tupple -> shouldTrackHabitToday(tupple.key) }
             if (todayHabits.isEmpty()) return@observe
 
-//            val itemsToDoAnyTime = todayHabits.map { tupple ->
-//                if(tupple.key.repeatDailyIn)
-//                HabitItem(tupple.key, tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }, selectedDate)
-//            }
+            val itemsToDoAnyTime = todayHabits.filter { tuple ->
+                isHabitDoAnytime(tuple.key.repeatDailyIn)
+            }.map { entry ->
+                HabitItem(entry, selectedDate)
+            }
 
-            val items = todayHabits.map { tupple ->
-                    HabitItem(tupple.key, tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }, selectedDate)
+            val itemsInMorning = todayHabits.filter { tuple ->
+                isHabitInMorning(tuple.key.repeatDailyIn)
+            }.map { entry ->
+                HabitItem(entry, selectedDate)
+            }.apply {
+
+            }
+
+            val itemsInAfternoon = todayHabits.filter { tuple ->
+                isHabitInAfternoon(tuple.key.repeatDailyIn)
+            }.map { entry ->
+                HabitItem(entry, selectedDate)
+            }
+
+            val itemsInEvening = todayHabits.filter { tuple ->
+                isHabitINEvening(tuple.key.repeatDailyIn)
+            }.map { entry ->
+                HabitItem(entry, selectedDate)
+            }
+
+            val items = arrayListOf<BaseItem>().apply {
+                add(HomeTitle("DO ANYTIME"))
+                addAll(itemsToDoAnyTime)
+                if(itemsInMorning.isNotEmpty()) {
+                    add(HomeTitle("IN MORNING"))
+                    addAll(itemsInMorning)
+                }
+                if(itemsInAfternoon.isNotEmpty()) {
+                    add(HomeTitle("IN AFTERNOON"))
+                    addAll(itemsInAfternoon)
+                }
+                if(itemsInEvening.isNotEmpty()) {
+                    add(HomeTitle("IN EVENING"))
+                    addAll(itemsInEvening)
+                }
             }
             baseRecyclerAdapter.setData(items)
             binding.recyclerView.scheduleLayoutAnimation()
         }
     }
 
-//    private fun getHabitRepeatation(repeatDailyIn: String): RepeatDailyIn {
-//        val (morning, afternoon, evening) = repeatDailyIn.split(",")
-//
-//        if(morning.isNotEmpty() && afternoon.isNotEmpty() && evening.isNotEmpty()) {
-//            return RepeatDailyIn.DOANYTIME
-//        }
-//
-//    }
+    private fun isHabitDoAnytime(repeatDailyIn: String): Boolean {
+        if(repeatDailyIn.isEmpty()) return true
+        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+
+        return morning.isNotEmpty() && afternoon.isNotEmpty() && evening.isNotEmpty()
+    }
+
+
+    private fun isHabitInMorning(repeatDailyIn: String): Boolean {
+        if(repeatDailyIn.isEmpty()) return false
+        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+
+        return morning.isNotEmpty()
+    }
+
+
+    private fun isHabitInAfternoon(repeatDailyIn: String): Boolean {
+        if(repeatDailyIn.isEmpty()) return false
+        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+
+        return afternoon.isNotEmpty()
+    }
+
+
+    private fun isHabitINEvening(repeatDailyIn: String): Boolean {
+        if(repeatDailyIn.isEmpty()) return false
+        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+
+        return evening.isNotEmpty()
+    }
 
     private fun shouldTrackHabitToday(habit: HabitData): Boolean {
         val startDate = stringToLocalDate(habit.startDate)
@@ -155,7 +209,7 @@ class HomeFragment : Fragment() {
                 bind.dayText.text = day.date.dayOfWeek.displayText()
 
                 if (day.date == selectedDate) {
-                    bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorAccent))
+                    bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorTertiaryFixed))
                 } else {
                     bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorOnPrimary))
                 }
@@ -194,10 +248,10 @@ class HomeFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val deletedItem = baseRecyclerAdapter.list[viewHolder.adapterPosition]
                 if (deletedItem is HabitItem) {
-                    mDatabaseViewModel.deleteHabit(deletedItem.habitData)
+                    mDatabaseViewModel.deleteHabit(deletedItem.tupple.key)
                     baseRecyclerAdapter.notifyItemRemoved(viewHolder.adapterPosition)
                     // Restore Deleted Item
-                    restoreDeletedData(viewHolder.itemView, deletedItem.habitData)
+                    restoreDeletedData(viewHolder.itemView, deletedItem.tupple.key)
                 }
             }
         }

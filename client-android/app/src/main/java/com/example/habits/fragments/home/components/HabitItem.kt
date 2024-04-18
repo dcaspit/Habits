@@ -11,16 +11,18 @@ import com.example.habits.data.models.HabitAction
 import com.example.habits.fragments.home.adapters.HabitItemHorizontalRecyclerAdapter
 import com.example.habits.data.models.HabitData
 import com.example.habits.fragments.add.HabitGoal
+import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
 import java.time.LocalDate
 
-class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val selectedData: LocalDate) : BaseItem() {
+class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selectedDate: LocalDate) : BaseItem() {
 
     override val viewType: Int = HABIT
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
-            holder.bind(habitData, habitAction, selectedData)
+            val habitAction =  tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }
+            holder.bind(tupple.key, habitAction, selectedDate)
         }
     }
 
@@ -29,7 +31,7 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private val adapter: HabitItemHorizontalRecyclerAdapter by lazy { HabitItemHorizontalRecyclerAdapter() }
-        fun bind(habitData: HabitData, habitAction: HabitAction?, selectedData: LocalDate) {
+        fun bind(habitData: HabitData, habitAction: HabitAction?, selectedDate: LocalDate) {
             binding.habitName.text = habitData.name
             binding.habitInterval.text = habitData.frequency
 
@@ -37,7 +39,7 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
 
             binding.root.setOnClickListener {
                 val action = habitData.id?.let { id ->
-                    HomeFragmentDirections.actionHomePageToDetailsPage(id, selectedData.toString())
+                    HomeFragmentDirections.actionHomePageToDetailsPage(id, selectedDate.toString())
                 }
                 if (action != null) {
                     binding.root.findNavController().navigate(action)
