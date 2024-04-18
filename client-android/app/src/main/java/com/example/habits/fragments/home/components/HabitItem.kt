@@ -64,6 +64,7 @@ class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selecte
                 if(habitAction != null && habitAction.completed) {
                     binding.progressText.text = "1/1"
                     binding.progressIndicator.setProgress(1, true)
+                    binding.root.isChecked = true
                 } else{
                     binding.progressText.text = "0/1"
                     binding.progressIndicator.setProgress(0, true)
