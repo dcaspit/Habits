@@ -18,7 +18,7 @@
     <color name="md_theme_background">#E2E2E9</color>
     <color name="md_theme_onBackground">#E2E2E9</color>
     <color name="md_theme_surface">#111318</color>
-    <color name="md_theme_onSurface">#E2E2E9</color>
+    <color name="md_theme_onSurface">#111318</color>
     <color name="md_theme_surfaceVariant">#44474E</color>
     <color name="md_theme_onSurfaceVariant">#C4C6D0</color>
     <color name="md_theme_outline">#8E9099</color>
@@ -140,4 +140,20 @@
     <color name="md_theme_surfaceContainer_highContrast">#1D2024</color>
     <color name="md_theme_surfaceContainerHigh_highContrast">#282A2F</color>
     <color name="md_theme_surfaceContainerHighest_highContrast">#33353A</color>
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="brown_700">#5D4037</color>
+    <color name="blue_grey_700">#455A64</color>
+    <color name="orange_800">#EF6C00</color>
+    <color name="green_700">#388E3C</color>
+    <color name="teal_700">#00796B</color>
+    <color name="pink_700">#C2185B</color>
+    <color name="red_800">#c62828</color>
+    <color name="blue_800">#1565C0</color>
+    <color name="cyan_700">#0097A7</color>
+    <color name="example_6_black">#BF000000</color>
+    <color name="example_7_white">#D9FFFFFF</color>
+    <color name="example_7_yellow">#FFEB3B</color>
+    <color name="example_1_selection_color">#FCCA3E</color>
+    <color name="inactive_text_color">#BEBEBE</color>
 </resources>
