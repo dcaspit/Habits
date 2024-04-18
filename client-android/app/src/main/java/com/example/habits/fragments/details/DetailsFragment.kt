@@ -96,6 +96,8 @@ class DetailsFragment: Fragment() {
             if(habitAction != null && habitAction.completed) {
                 binding.progressText.text = "1/1"
                 binding.progressIndicator.setProgress(1, true)
+                binding.actionContainer.makeGone()
+                binding.trackContainer.makeGone()
             } else{
                 binding.progressText.text = "0/1"
             }
@@ -106,25 +108,29 @@ class DetailsFragment: Fragment() {
             if(habitAction != null) {
                 binding.progressIndicator.setProgress(habitAction.partialAmount, true)
                 binding.progressText.text = "${habitAction.partialAmount}/$count"
+                binding.actionContainer.makeGone()
+                binding.trackContainer.makeGone()
             } else {
                 binding.progressIndicator.setProgress(0, true)
                 binding.progressText.text = "0/$count"
-            }
-            binding.mainTrackButton.makeVisible()
-            binding.trackActionButton.setOnClickListener {
-                val addition = binding.textFieldName.text.toString()
-                binding.progressText.text = "$addition/$count"
-                binding.progressIndicator.progress = addition.toInt()
-                binding.textFieldName.setText("")
-                binding.textFieldName.clearFocus()
-                binding.actionContainer.makeGone()
-                mDatabaseViewModel.trackHabit(HabitAction(
-                    args.habitId,
-                    args.selectedDate,
-                    habitData.habitType,
-                    (addition.toInt() == count.toInt()),
-                    addition.toInt()
-                ))
+                binding.mainTrackButton.makeVisible()
+                binding.trackActionButton.setOnClickListener {
+                    val addition = binding.textFieldName.text.toString()
+                    binding.progressText.text = "$addition/$count"
+                    binding.progressIndicator.progress = addition.toInt()
+                    binding.textFieldName.setText("")
+                    binding.textFieldName.clearFocus()
+                    binding.actionContainer.makeGone()
+                    binding.trackContainer.makeGone()
+                    mDatabaseViewModel.trackHabit(HabitAction(
+                        args.habitId,
+                        args.selectedDate,
+                        habitData.habitType,
+                        (addition.toInt() == count.toInt()),
+                        addition.toInt()
+                    ))
+                }
+                binding.progressIndicator.setProgress(0, true)
             }
         }
 
@@ -142,7 +148,5 @@ class DetailsFragment: Fragment() {
                 count.toInt()
             ))
         }
-
-        binding.progressIndicator.setProgress(0, true)
     }
 }
