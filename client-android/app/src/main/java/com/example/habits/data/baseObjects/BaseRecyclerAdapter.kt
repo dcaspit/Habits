@@ -6,17 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.fragments.home.components.EmptyItem
 import com.example.habits.fragments.home.components.HabitAddItem
 import com.example.habits.fragments.home.components.HabitItem
+import com.example.habits.fragments.home.components.HomeTitle
 import com.example.habits.utils.BaseItemDiffUtils
 
-class BaseRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BaseRecyclerAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var list = emptyList<BaseItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if(viewType == BaseItem.HABIT) {
-            return HabitItem.create(parent)
-        } else if (viewType == BaseItem.EMPTY_HABIT) {
-            return EmptyItem.create(parent)
+        when (viewType) {
+            BaseItem.HABIT -> return HabitItem.create(parent)
+            BaseItem.EMPTY_HABIT -> return EmptyItem.create(parent)
+            BaseItem.TITLE -> return HomeTitle.create(parent)
         }
         return HabitAddItem.create(parent)
     }
@@ -31,7 +32,7 @@ class BaseRecyclerAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int = list.size
 
-    fun setData(newList: List<BaseItem>){
+    fun setData(newList: List<BaseItem>) {
         val jsonMovieDiffUtil = BaseItemDiffUtils(list, newList)
         val movieDiffResult = DiffUtil.calculateDiff(jsonMovieDiffUtil)
         this.list = ArrayList(newList)

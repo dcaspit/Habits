@@ -64,6 +64,7 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
                     binding.progressIndicator.setProgress(1, true)
                 } else{
                     binding.progressText.text = "0/1"
+                    binding.progressIndicator.setProgress(0, true)
                 }
             } else if (count.isNotEmpty()) {
                 binding.progressIndicator.max = count.toInt()
@@ -74,6 +75,8 @@ class HabitItem(val habitData: HabitData, val habitAction: HabitAction?, val sel
                     binding.progressIndicator.setProgress(0, true)
                     binding.progressText.text = "0/$count"
                 }
+            } else {
+                binding.progressIndicator.setProgress(0, true)
             }
         }
     }

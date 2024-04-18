@@ -18,6 +18,7 @@ import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.CalendarDayBinding
 import com.example.habits.databinding.FragmentHomeBinding
+import com.example.habits.fragments.add.RepeatDailyIn
 import com.example.habits.fragments.home.components.EmptyItem
 import com.example.habits.fragments.home.components.HabitItem
 import com.example.habits.utils.displayText
@@ -80,6 +81,12 @@ class HomeFragment : Fragment() {
             if (it.isEmpty()) return@observe
             val todayHabits = it.filter { tupple -> shouldTrackHabitToday(tupple.key) }
             if (todayHabits.isEmpty()) return@observe
+
+//            val itemsToDoAnyTime = todayHabits.map { tupple ->
+//                if(tupple.key.repeatDailyIn)
+//                HabitItem(tupple.key, tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }, selectedDate)
+//            }
+
             val items = todayHabits.map { tupple ->
                     HabitItem(tupple.key, tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }, selectedDate)
             }
@@ -87,6 +94,15 @@ class HomeFragment : Fragment() {
             binding.recyclerView.scheduleLayoutAnimation()
         }
     }
+
+//    private fun getHabitRepeatation(repeatDailyIn: String): RepeatDailyIn {
+//        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+//
+//        if(morning.isNotEmpty() && afternoon.isNotEmpty() && evening.isNotEmpty()) {
+//            return RepeatDailyIn.DOANYTIME
+//        }
+//
+//    }
 
     private fun shouldTrackHabitToday(habit: HabitData): Boolean {
         val startDate = stringToLocalDate(habit.startDate)
@@ -139,7 +155,7 @@ class HomeFragment : Fragment() {
                 bind.dayText.text = day.date.dayOfWeek.displayText()
 
                 if (day.date == selectedDate) {
-                    bind.dateText.setTextColor(view.context.getColorCompat(R.color.example_7_yellow))
+                    bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorAccent))
                 } else {
                     bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorOnPrimary))
                 }

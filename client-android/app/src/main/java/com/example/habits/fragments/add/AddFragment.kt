@@ -27,7 +27,7 @@ enum class HabitGoal {
 }
 
 enum class RepeatDailyIn {
-    MORNING, AFTERNOON, EVENING
+    MORNING, AFTERNOON, EVENING, DOANYTIME
 }
 
 class AddFragment : Fragment() {
@@ -147,7 +147,7 @@ class AddFragment : Fragment() {
 
             val repeatDailyIn = StringBuilder()
             mAddViewModel.repeatDailyIn.value?.forEach { dailyIn ->
-                repeatDailyIn.append(dailyIn.name)
+                repeatDailyIn.append(dailyIn.ordinal)
                 repeatDailyIn.append(",")
             }
 
@@ -245,6 +245,11 @@ class AddFragment : Fragment() {
                     }
 
                     RepeatDailyIn.EVENING -> {
+                        binding.evening.turnOn(color)
+                    }
+                    RepeatDailyIn.DOANYTIME -> {
+                        binding.morning.turnOn(color)
+                        binding.afternoon.turnOn(color)
                         binding.evening.turnOn(color)
                     }
                 }

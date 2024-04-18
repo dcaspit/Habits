@@ -11,6 +11,7 @@ abstract class BaseItem{
         const val HABIT = 0
         const val ADD_HABIT = 1
         const val EMPTY_HABIT = 2
+        const val TITLE = 3
     }
 }
 
