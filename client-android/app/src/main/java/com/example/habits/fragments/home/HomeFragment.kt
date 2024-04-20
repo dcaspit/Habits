@@ -58,6 +58,9 @@ class HomeFragment : Fragment() {
             _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
             //binding.lifecycleOwner = viewLifecycleOwner
 
+
+            binding.customBottomBar.inflateMenu(R.menu.bottom_nav_menu)
+
             setupRecyclerView()
             observeHabits()
             mDatabaseViewModel.getAllHabits()
