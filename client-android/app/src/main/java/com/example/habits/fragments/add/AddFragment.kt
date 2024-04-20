@@ -115,7 +115,7 @@ class AddFragment : Fragment() {
         binding.morning.addRepeatDailyClickListener(RepeatDailyIn.MORNING)
         binding.afternoon.addRepeatDailyClickListener(RepeatDailyIn.AFTERNOON)
         binding.evening.addRepeatDailyClickListener(RepeatDailyIn.EVENING)
-        binding.repeatDailyInCheckbox.addRepeatDailtDayCheckboxClickListener()
+        binding.repeatDailyInCheckbox.addRepeatDailyDayCheckboxClickListener()
     }
 
     private fun setAddButtonClickListener() {
@@ -281,14 +281,12 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun MaterialCheckBox.addRepeatDailtDayCheckboxClickListener() {
+    private fun MaterialCheckBox.addRepeatDailyDayCheckboxClickListener() {
         addOnCheckedStateChangedListener { _, state ->
             if (state == MaterialCheckBox.STATE_CHECKED) {
                 mAddViewModel.setRepeatDailys(
                     mutableSetOf(
-                        RepeatDailyIn.MORNING,
-                        RepeatDailyIn.AFTERNOON,
-                        RepeatDailyIn.EVENING,
+                        RepeatDailyIn.DOANYTIME
                     )
                 )
             } else {

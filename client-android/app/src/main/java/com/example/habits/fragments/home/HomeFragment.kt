@@ -86,7 +86,11 @@ class HomeFragment : Fragment() {
                 HabitItem(entry, selectedDate)
             }
 
-            val itemsInMorning = todayHabits.filter { tuple ->
+            val itemsWithoutToDoAnytime = todayHabits.filter { tuple ->
+                !isHabitDoAnytime(tuple.key.repeatDailyIn)
+            }
+
+            val itemsInMorning = itemsWithoutToDoAnytime.filter { tuple ->
                 isHabitInMorning(tuple.key.repeatDailyIn)
             }.map { entry ->
                 HabitItem(entry, selectedDate)
@@ -94,30 +98,32 @@ class HomeFragment : Fragment() {
 
             }
 
-            val itemsInAfternoon = todayHabits.filter { tuple ->
+            val itemsInAfternoon = itemsWithoutToDoAnytime.filter { tuple ->
                 isHabitInAfternoon(tuple.key.repeatDailyIn)
             }.map { entry ->
                 HabitItem(entry, selectedDate)
             }
 
-            val itemsInEvening = todayHabits.filter { tuple ->
+            val itemsInEvening = itemsWithoutToDoAnytime.filter { tuple ->
                 isHabitINEvening(tuple.key.repeatDailyIn)
             }.map { entry ->
                 HabitItem(entry, selectedDate)
             }
 
             val items = arrayListOf<BaseItem>().apply {
-                add(HomeTitle("DO ANYTIME"))
-                addAll(itemsToDoAnyTime)
-                if(itemsInMorning.isNotEmpty()) {
+                if (itemsToDoAnyTime.isNotEmpty()) {
+                    add(HomeTitle("DO ANYTIME"))
+                    addAll(itemsToDoAnyTime)
+                }
+                if (itemsInMorning.isNotEmpty()) {
                     add(HomeTitle("IN MORNING"))
                     addAll(itemsInMorning)
                 }
-                if(itemsInAfternoon.isNotEmpty()) {
+                if (itemsInAfternoon.isNotEmpty()) {
                     add(HomeTitle("IN AFTERNOON"))
                     addAll(itemsInAfternoon)
                 }
-                if(itemsInEvening.isNotEmpty()) {
+                if (itemsInEvening.isNotEmpty()) {
                     add(HomeTitle("IN EVENING"))
                     addAll(itemsInEvening)
                 }
@@ -128,34 +134,57 @@ class HomeFragment : Fragment() {
     }
 
     private fun isHabitDoAnytime(repeatDailyIn: String): Boolean {
-        if(repeatDailyIn.isEmpty()) return true
-        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+        if (repeatDailyIn.isEmpty()) return true
+        val list = repeatDailyIn.split(",")
 
-        return morning.isNotEmpty() && afternoon.isNotEmpty() && evening.isNotEmpty()
+        list.forEach { repeat ->
+            if (repeat == RepeatDailyIn.DOANYTIME.ordinal.toString()) {
+                return true
+            }
+        }
+        return false
     }
 
 
     private fun isHabitInMorning(repeatDailyIn: String): Boolean {
-        if(repeatDailyIn.isEmpty()) return false
-        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+        if (repeatDailyIn.isEmpty()) return false
+        val list = repeatDailyIn.split(",")
 
-        return morning.isNotEmpty()
+        list.forEach { repeat ->
+            if (repeat == RepeatDailyIn.MORNING.ordinal.toString()) {
+                return true
+            }
+        }
+
+        return false
     }
 
 
     private fun isHabitInAfternoon(repeatDailyIn: String): Boolean {
-        if(repeatDailyIn.isEmpty()) return false
-        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+        if (repeatDailyIn.isEmpty()) return false
+        val list = repeatDailyIn.split(",")
 
-        return afternoon.isNotEmpty()
+        list.forEach { repeat ->
+            if (repeat == RepeatDailyIn.AFTERNOON.ordinal.toString()) {
+                return true
+            }
+        }
+
+        return false
     }
 
 
     private fun isHabitINEvening(repeatDailyIn: String): Boolean {
-        if(repeatDailyIn.isEmpty()) return false
-        val (morning, afternoon, evening) = repeatDailyIn.split(",")
+        if (repeatDailyIn.isEmpty()) return false
+        val list = repeatDailyIn.split(",")
 
-        return evening.isNotEmpty()
+        list.forEach { repeat ->
+            if (repeat == RepeatDailyIn.EVENING.ordinal.toString()) {
+                return true
+            }
+        }
+
+        return false
     }
 
     private fun shouldTrackHabitToday(habit: HabitData): Boolean {
@@ -169,7 +198,7 @@ class HomeFragment : Fragment() {
         val days = habit.trackDays.split(",")
 
         days.forEach { day ->
-            if(day == selectedDate.dayOfWeek.toString()) {
+            if (day == selectedDate.dayOfWeek.toString()) {
                 return true
             }
         }

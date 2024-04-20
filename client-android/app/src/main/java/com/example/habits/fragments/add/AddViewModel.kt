@@ -31,7 +31,11 @@ class AddViewModel : ViewModel() {
     val days: LiveData<MutableSet<DayOfWeek>>
         get() = _days
 
-    private var _repeatDailyIn = MutableLiveData<MutableSet<RepeatDailyIn>>(mutableSetOf())
+    private var _repeatDailyIn = MutableLiveData(
+        mutableSetOf(
+            RepeatDailyIn.DOANYTIME,
+        )
+    )
     val repeatDailyIn: LiveData<MutableSet<RepeatDailyIn>>
         get() = _repeatDailyIn
 
