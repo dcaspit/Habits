@@ -28,9 +28,8 @@ data class HabitAction(
     @ColumnInfo(name = "habit_id") val habitId: Int,
     @ColumnInfo(name = "selected_date") val selectedDate: String,
     @ColumnInfo(name = "habit_type") val habitType: String,
+    @ColumnInfo(name = "repeat_daily_in") val repeatDailyIn: String,
     @ColumnInfo(name = "completed") val completed: Boolean,
     @ColumnInfo(name = "partial_amount") val partialAmount: Int,
     @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "habit_action_id") val id: Int? = null,
-): Parcelable {
-
-}
+): Parcelable

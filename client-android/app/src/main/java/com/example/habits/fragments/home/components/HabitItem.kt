@@ -11,18 +11,19 @@ import com.example.habits.data.models.HabitAction
 import com.example.habits.fragments.home.adapters.HabitItemHorizontalRecyclerAdapter
 import com.example.habits.data.models.HabitData
 import com.example.habits.fragments.add.HabitGoal
+import com.example.habits.fragments.add.RepeatDailyIn
 import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
 import java.time.LocalDate
 
-class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selectedDate: LocalDate) : BaseItem() {
+class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selectedDate: LocalDate, val repeatDailyIn: RepeatDailyIn) : BaseItem() {
 
     override val viewType: Int = HABIT
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ViewHolder) {
-            val habitAction =  tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) }
-            holder.bind(tupple.key, habitAction, selectedDate)
+            val habitAction =  tupple.value.find { action -> action.selectedDate == localDateToString(selectedDate) && action.repeatDailyIn == repeatDailyIn.name }
+            holder.bind(tupple.key, habitAction, selectedDate, repeatDailyIn)
         }
     }
 
@@ -31,15 +32,15 @@ class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selecte
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private val adapter: HabitItemHorizontalRecyclerAdapter by lazy { HabitItemHorizontalRecyclerAdapter() }
-        fun bind(habitData: HabitData, habitAction: HabitAction?, selectedDate: LocalDate) {
+        fun bind(habitData: HabitData, habitAction: HabitAction?, selectedDate: LocalDate, repeatDailyIn: RepeatDailyIn) {
             binding.habitName.text = habitData.name
             binding.habitInterval.text = habitData.frequency
 
-            setHabitProgressBar(habitData, habitAction)
+            setHabitProgressBar(habitData, habitAction, repeatDailyIn)
 
             binding.root.setOnClickListener {
                 val action = habitData.id?.let { id ->
-                    HomeFragmentDirections.actionHomePageToDetailsPage(id, selectedDate.toString())
+                    HomeFragmentDirections.actionHomePageToDetailsPage(id, selectedDate.toString(), repeatDailyIn.name)
                 }
                 if (action != null) {
                     binding.root.findNavController().navigate(action)
@@ -47,7 +48,11 @@ class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selecte
             }
         }
 
-        private fun setHabitProgressBar(habitData: HabitData, habitAction: HabitAction?) {
+        private fun setHabitProgressBar(
+            habitData: HabitData,
+            habitAction: HabitAction?,
+            repeatDailyIn: RepeatDailyIn
+        ) {
             val types = habitAction?.habitType?.split(",") ?: habitData.habitType.split(",")
 
             val type = types[0]
@@ -61,17 +66,16 @@ class HabitItem(val tupple: Map.Entry<HabitData, List<HabitAction>>, val selecte
 
             if (type == HabitGoal.NONE.ordinal.toString()) {
                 binding.progressIndicator.max = 1
-                if(habitAction != null && habitAction.completed) {
+                if(habitAction != null && habitAction.completed && habitAction.repeatDailyIn == repeatDailyIn.name) {
                     binding.progressText.text = "1/1"
                     binding.progressIndicator.setProgress(1, true)
-                    binding.root.isChecked = true
                 } else{
                     binding.progressText.text = "0/1"
                     binding.progressIndicator.setProgress(0, true)
                 }
             } else if (count.isNotEmpty()) {
                 binding.progressIndicator.max = count.toInt()
-                if(habitAction != null) {
+                if(habitAction != null && habitAction.repeatDailyIn == repeatDailyIn.name) {
                     binding.progressIndicator.setProgress(habitAction.partialAmount, true)
                     binding.progressText.text = "${habitAction.partialAmount}/$count"
                 } else {

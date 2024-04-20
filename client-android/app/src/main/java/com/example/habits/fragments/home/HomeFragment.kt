@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
             val itemsToDoAnyTime = todayHabits.filter { tuple ->
                 isHabitDoAnytime(tuple.key.repeatDailyIn)
             }.map { entry ->
-                HabitItem(entry, selectedDate)
+                HabitItem(entry, selectedDate, RepeatDailyIn.DOANYTIME)
             }
 
             val itemsWithoutToDoAnytime = todayHabits.filter { tuple ->
@@ -96,7 +96,7 @@ class HomeFragment : Fragment() {
             val itemsInMorning = itemsWithoutToDoAnytime.filter { tuple ->
                 isHabitInMorning(tuple.key.repeatDailyIn)
             }.map { entry ->
-                HabitItem(entry, selectedDate)
+                HabitItem(entry, selectedDate, RepeatDailyIn.MORNING)
             }.apply {
 
             }
@@ -104,13 +104,13 @@ class HomeFragment : Fragment() {
             val itemsInAfternoon = itemsWithoutToDoAnytime.filter { tuple ->
                 isHabitInAfternoon(tuple.key.repeatDailyIn)
             }.map { entry ->
-                HabitItem(entry, selectedDate)
+                HabitItem(entry, selectedDate, RepeatDailyIn.AFTERNOON)
             }
 
             val itemsInEvening = itemsWithoutToDoAnytime.filter { tuple ->
                 isHabitINEvening(tuple.key.repeatDailyIn)
             }.map { entry ->
-                HabitItem(entry, selectedDate)
+                HabitItem(entry, selectedDate, RepeatDailyIn.EVENING)
             }
 
             val items = arrayListOf<BaseItem>().apply {

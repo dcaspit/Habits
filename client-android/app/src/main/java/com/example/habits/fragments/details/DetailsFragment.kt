@@ -14,6 +14,7 @@ import com.example.habits.data.models.HabitData
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentDetailsBinding
 import com.example.habits.fragments.add.HabitGoal
+import com.example.habits.fragments.add.RepeatDailyIn
 import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
 import com.example.habits.utils.makeVisible
@@ -53,8 +54,8 @@ class DetailsFragment: Fragment() {
         mDatabaseViewModel.habit.observe(viewLifecycleOwner) {
             val (habit, habitActions) = it
             setActionBarTitle(habit)
-            val action = habitActions.find { habitAction -> habitAction.selectedDate == args.selectedDate }
-            setHabitProgressBar(habit, action)
+            val action = habitActions.find { habitAction -> habitAction.selectedDate == args.selectedDate && habitAction.repeatDailyIn == args.repeatDailyIn }
+            setHabitProgressBar(habit, action, args.repeatDailyIn)
         }
         mDatabaseViewModel.getHabitById(args.habitId)
 
@@ -78,7 +79,7 @@ class DetailsFragment: Fragment() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun setHabitProgressBar(habitData: HabitData, habitAction: HabitAction?) {
+    private fun setHabitProgressBar(habitData: HabitData, habitAction: HabitAction?, repeatDailyIn: String) {
         var (type, count) = habitAction?.habitType?.split(",") ?: habitData.habitType.split(",")
         if (type.isEmpty()) {
             binding.trackCard.makeGone()
@@ -126,8 +127,9 @@ class DetailsFragment: Fragment() {
                         args.habitId,
                         args.selectedDate,
                         habitData.habitType,
+                        repeatDailyIn,
                         (addition.toInt() == count.toInt()),
-                        addition.toInt()
+                        addition.toInt(),
                     ))
                 }
                 binding.progressIndicator.setProgress(0, true)
@@ -144,6 +146,7 @@ class DetailsFragment: Fragment() {
                 args.habitId,
                 args.selectedDate,
                 habitData.habitType,
+                repeatDailyIn,
                 true,
                 count.toInt()
             ))

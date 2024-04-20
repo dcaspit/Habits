@@ -36,6 +36,9 @@
         <argument
             android:name="selectedDate"
             app:argType="string" />
+        <argument
+            android:name="repeatDailyIn"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
