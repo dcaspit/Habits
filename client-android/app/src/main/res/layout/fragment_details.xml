@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        app:cardBackgroundColor="@null">
+        android:layout_marginBottom="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -131,8 +130,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            app:cardBackgroundColor="@null">
+            android:layout_margin="2dp">
 
             <TextView
                 android:id="@+id/repeation_text"
@@ -148,8 +146,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:layout_margin="2dp"
-            app:cardBackgroundColor="@null">
+            android:layout_margin="2dp">
 
             <TextView
                 android:id="@+id/reminder_text"
@@ -166,8 +163,7 @@
         android:id="@+id/calendar_card"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        app:cardBackgroundColor="@null">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/calendar_text"
@@ -182,8 +178,7 @@
         android:id="@+id/streak_card"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        app:cardBackgroundColor="@null">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/streak_text"

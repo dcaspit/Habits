@@ -97,8 +97,6 @@ class HomeFragment : Fragment() {
                 isHabitInMorning(tuple.key.repeatDailyIn)
             }.map { entry ->
                 HabitItem(entry, selectedDate, RepeatDailyIn.MORNING)
-            }.apply {
-
             }
 
             val itemsInAfternoon = itemsWithoutToDoAnytime.filter { tuple ->
