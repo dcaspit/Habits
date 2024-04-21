@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Point
 import android.util.AttributeSet
+import com.example.habits.R
 import com.example.habits.utils.getPrimaryColor
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -52,7 +53,7 @@ class CurvedBottomNavigationView : BottomNavigationView {
         mPath = Path()
         mPaint = Paint()
         mPaint!!.style = Paint.Style.FILL_AND_STROKE
-        mPaint!!.setColor(getPrimaryColor(context))
+        mPaint!!.setColor(getPrimaryColor(context, R.attr.colorOnPrimaryContainer))
         setBackgroundColor(Color.TRANSPARENT)
     }
 

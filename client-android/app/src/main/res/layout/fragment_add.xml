@@ -100,11 +100,10 @@
     </LinearLayout>
 
 
-    <View
+    <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="?colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/ll_days" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -234,12 +233,11 @@
             android:textSize="16dp" />
     </LinearLayout>
 
-    <View
+    <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divder_1"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="?colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/ll_days" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -311,12 +309,11 @@
              />
     </LinearLayout>
 
-    <View
+    <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divder_2"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="?colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/ll_days" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -360,12 +357,11 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View
+    <com.google.android.material.divider.MaterialDivider
         android:id="@+id/divder_3"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="?colorPrimary"
         app:layout_constraintTop_toBottomOf="@id/cl_reminder" />
 
     <FrameLayout
