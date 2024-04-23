@@ -53,7 +53,7 @@ class CurvedBottomNavigationView : BottomNavigationView {
         mPath = Path()
         mPaint = Paint()
         mPaint!!.style = Paint.Style.FILL_AND_STROKE
-        mPaint!!.setColor(getPrimaryColor(context, R.attr.colorOnPrimaryContainer))
+        mPaint!!.setColor(getPrimaryColor(context))
         setBackgroundColor(Color.TRANSPARENT)
     }
 

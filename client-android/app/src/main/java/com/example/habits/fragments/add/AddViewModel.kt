@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.habits.data.models.HabitData
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 
@@ -33,7 +32,7 @@ class AddViewModel : ViewModel() {
 
     private var _repeatDailyIn = MutableLiveData(
         mutableSetOf(
-            RepeatDailyIn.DOANYTIME,
+            RepeatDailyIn.ANYTIME,
         )
     )
     val repeatDailyIn: LiveData<MutableSet<RepeatDailyIn>>

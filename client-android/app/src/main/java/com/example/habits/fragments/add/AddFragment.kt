@@ -9,8 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.example.habits.R
 import com.example.habits.data.models.HabitData
+import com.example.habits.data.notifcations.NotifyWorker
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
 import com.example.habits.utils.getPrimaryColor
@@ -27,7 +32,7 @@ enum class HabitGoal {
 }
 
 enum class RepeatDailyIn {
-    MORNING, AFTERNOON, EVENING, DOANYTIME
+    MORNING, AFTERNOON, EVENING, ANYTIME
 }
 
 class AddFragment : Fragment() {
@@ -63,6 +68,11 @@ class AddFragment : Fragment() {
 
         observeRepeatDailys()
         addRepeatDailysClickListeners()
+
+        binding.tvNotification.setOnClickListener {
+            val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
+            WorkManager.getInstance(binding.root.context).enqueue(notificationRequest)
+        }
 
         setAddButtonClickListener()
         return binding.root
@@ -247,7 +257,7 @@ class AddFragment : Fragment() {
                     RepeatDailyIn.EVENING -> {
                         binding.evening.turnOn(color)
                     }
-                    RepeatDailyIn.DOANYTIME -> {
+                    RepeatDailyIn.ANYTIME -> {
                         binding.morning.turnOn(color)
                         binding.afternoon.turnOn(color)
                         binding.evening.turnOn(color)
@@ -286,7 +296,7 @@ class AddFragment : Fragment() {
             if (state == MaterialCheckBox.STATE_CHECKED) {
                 mAddViewModel.setRepeatDailys(
                     mutableSetOf(
-                        RepeatDailyIn.DOANYTIME
+                        RepeatDailyIn.ANYTIME
                     )
                 )
             } else {
@@ -335,10 +345,12 @@ class AddFragment : Fragment() {
 
     private fun MaterialButton.turnOff() {
         backgroundTintList = null
+        setTextColor(getPrimaryColor(context))
     }
 
     private fun MaterialButton.turnOn(color: Int) {
         backgroundTintList = ColorStateList.valueOf(color)
+        setTextColor(getPrimaryColor(context, R.attr.colorOnPrimary))
     }
 
     override fun onDestroyView() {

@@ -86,7 +86,7 @@ class HomeFragment : Fragment() {
             val itemsToDoAnyTime = todayHabits.filter { tuple ->
                 isHabitDoAnytime(tuple.key.repeatDailyIn)
             }.map { entry ->
-                HabitItem(entry, selectedDate, RepeatDailyIn.DOANYTIME)
+                HabitItem(entry, selectedDate, RepeatDailyIn.ANYTIME)
             }
 
             val itemsWithoutToDoAnytime = todayHabits.filter { tuple ->
@@ -139,7 +139,7 @@ class HomeFragment : Fragment() {
         val list = repeatDailyIn.split(",")
 
         list.forEach { repeat ->
-            if (repeat == RepeatDailyIn.DOANYTIME.ordinal.toString()) {
+            if (repeat == RepeatDailyIn.ANYTIME.ordinal.toString()) {
                 return true
             }
         }
