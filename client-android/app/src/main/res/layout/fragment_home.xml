@@ -30,7 +30,6 @@
         android:src="@drawable/ic_add"
         android:clickable="true"
         android:focusable="true"
-        style="?attr/floatingActionButtonLargePrimaryStyle"
         app:layout_constraintBottom_toTopOf="@id/customBottomBar"
         android:layout_marginBottom="-40dp"
         app:layout_constraintStart_toStartOf="@id/customBottomBar"

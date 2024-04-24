@@ -239,7 +239,7 @@ class HomeFragment : Fragment() {
                 bind.dayText.text = day.date.dayOfWeek.displayText()
 
                 if (day.date == selectedDate) {
-                    bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorTertiaryFixed))
+                    bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorSecondary))
                 } else {
                     bind.dateText.setTextColor(getPrimaryColor(context, R.attr.colorOnPrimary))
                 }
