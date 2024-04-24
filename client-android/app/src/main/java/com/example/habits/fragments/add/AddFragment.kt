@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -107,14 +106,14 @@ class AddFragment : Fragment() {
                 HabitGoal.NUMERIC -> {
                     binding.llGoalForHabit.makeVisible()
                     binding.goalTimeButton.turnOff()
-                    binding.goalNumberButton.turnOn(getPrimaryColor(context))
+                    binding.goalNumberButton.turnOn()
                     binding.textFieldGoalForHabit.hint = "0 times"
                 }
 
                 HabitGoal.DURATION -> {
                     binding.llGoalForHabit.makeVisible()
                     binding.goalNumberButton.turnOff()
-                    binding.goalTimeButton.turnOn(getPrimaryColor(context))
+                    binding.goalTimeButton.turnOn()
                     binding.textFieldGoalForHabit.hint = "0 minutes"
                 }
             }
@@ -192,7 +191,6 @@ class AddFragment : Fragment() {
         mAddViewModel.days.observe(viewLifecycleOwner) {
             if (it.isEmpty()) return@observe
 
-            val color = getPrimaryColor(context)
             binding.monday.turnOff()
             binding.thesday.turnOff()
             binding.wednesday.turnOff()
@@ -204,31 +202,31 @@ class AddFragment : Fragment() {
             it.forEach { day ->
                 when (day) {
                     DayOfWeek.MONDAY -> {
-                        binding.monday.turnOn(color)
+                        binding.monday.turnOn()
                     }
 
                     DayOfWeek.TUESDAY -> {
-                        binding.thesday.turnOn(color)
+                        binding.thesday.turnOn()
                     }
 
                     DayOfWeek.WEDNESDAY -> {
-                        binding.wednesday.turnOn(color)
+                        binding.wednesday.turnOn()
                     }
 
                     DayOfWeek.THURSDAY -> {
-                        binding.thursday.turnOn(color)
+                        binding.thursday.turnOn()
                     }
 
                     DayOfWeek.FRIDAY -> {
-                        binding.friday.turnOn(color)
+                        binding.friday.turnOn()
                     }
 
                     DayOfWeek.SATURDAY -> {
-                        binding.saturday.turnOn(color)
+                        binding.saturday.turnOn()
                     }
 
                     DayOfWeek.SUNDAY -> {
-                        binding.sunday.turnOn(color)
+                        binding.sunday.turnOn()
                     }
                 }
             }
@@ -239,7 +237,6 @@ class AddFragment : Fragment() {
         mAddViewModel.repeatDailyIn.observe(viewLifecycleOwner) {
             if (it.isEmpty()) return@observe
 
-            val color = getPrimaryColor(context)
             binding.morning.turnOff()
             binding.afternoon.turnOff()
             binding.evening.turnOff()
@@ -247,20 +244,20 @@ class AddFragment : Fragment() {
             it.forEach { repeatDaily ->
                 when (repeatDaily) {
                     RepeatDailyIn.MORNING -> {
-                        binding.morning.turnOn(color)
+                        binding.morning.turnOn()
                     }
 
                     RepeatDailyIn.AFTERNOON -> {
-                        binding.afternoon.turnOn(color)
+                        binding.afternoon.turnOn()
                     }
 
                     RepeatDailyIn.EVENING -> {
-                        binding.evening.turnOn(color)
+                        binding.evening.turnOn()
                     }
                     RepeatDailyIn.ANYTIME -> {
-                        binding.morning.turnOn(color)
-                        binding.afternoon.turnOn(color)
-                        binding.evening.turnOn(color)
+                        binding.morning.turnOn()
+                        binding.afternoon.turnOn()
+                        binding.evening.turnOn()
                     }
                 }
             }
@@ -310,22 +307,20 @@ class AddFragment : Fragment() {
     }
 
     private fun MaterialButton.addDayClickListener(dayOfWeek: DayOfWeek) {
-        val color = getPrimaryColor(context)
         setOnClickListener {
-            toggleButton(color, dayOfWeek)
+            toggleButton(dayOfWeek)
         }
     }
 
     private fun MaterialButton.addRepeatDailyClickListener(repeatDailyIn: RepeatDailyIn) {
-        val color = getPrimaryColor(context)
         setOnClickListener {
-            toggleRepeatDailyButton(color, repeatDailyIn)
+            toggleRepeatDailyButton(repeatDailyIn)
         }
     }
 
-    private fun MaterialButton.toggleRepeatDailyButton(color: Int, repeatDailyIn: RepeatDailyIn) {
-        if (backgroundTintList == null) {
-            turnOn(color)
+    private fun MaterialButton.toggleRepeatDailyButton(repeatDailyIn: RepeatDailyIn) {
+        if (backgroundTintList == ColorStateList.valueOf(getPrimaryColor(context))) {
+            turnOn()
             mAddViewModel.addRepeatDaily(repeatDailyIn)
         } else {
             turnOff()
@@ -333,9 +328,9 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun MaterialButton.toggleButton(color: Int, dayOfWeek: DayOfWeek) {
-        if (backgroundTintList == null) {
-            turnOn(color)
+    private fun MaterialButton.toggleButton(dayOfWeek: DayOfWeek) {
+        if (backgroundTintList == ColorStateList.valueOf(getPrimaryColor(context))) {
+            turnOn()
             mAddViewModel.addDay(dayOfWeek)
         } else {
             turnOff()
@@ -344,13 +339,11 @@ class AddFragment : Fragment() {
     }
 
     private fun MaterialButton.turnOff() {
-        backgroundTintList = null
-        setTextColor(getPrimaryColor(context))
+        backgroundTintList = ColorStateList.valueOf(getPrimaryColor(context))
     }
 
-    private fun MaterialButton.turnOn(color: Int) {
-        backgroundTintList = ColorStateList.valueOf(color)
-        setTextColor(getPrimaryColor(context, R.attr.colorOnPrimary))
+    private fun MaterialButton.turnOn() {
+        backgroundTintList = ColorStateList.valueOf(getPrimaryColor(context, R.attr.colorSecondary))
     }
 
     override fun onDestroyView() {

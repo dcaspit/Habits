@@ -17,7 +17,7 @@ class CurvedBottomNavigationView : BottomNavigationView {
     private var mPaint: Paint? = null
 
     /** the CURVE_CIRCLE_RADIUS represent the radius of the fab button  */
-    private val CURVE_CIRCLE_RADIUS = 256 / 2
+    private val CURVE_CIRCLE_RADIUS = 224 / 2
 
     // the coordinates of the first curve
     private val mFirstCurveStartPoint = Point()

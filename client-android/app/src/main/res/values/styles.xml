@@ -5,5 +5,9 @@
         <item name="titleTextColor">?colorOnPrimary</item>
     </style>
 
+    <style name="AppTheme.AddTextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">?colorOnPrimary</item>
+    </style>
+
 
 </resources>
