@@ -9,9 +9,9 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_field_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxStrokeColor=""
         app:endIconMode="clear_text"
         android:hint="@string/name_your_habit">
 
@@ -59,6 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        tools:visibility="visible"
         android:visibility="gone">
 
         <LinearLayout

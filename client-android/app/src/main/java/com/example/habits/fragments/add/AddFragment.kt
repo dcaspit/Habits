@@ -59,6 +59,33 @@ class AddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
+
+        val colorList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_activated),  // Disabled
+                intArrayOf(android.R.attr.state_focused)    // Enabled
+            ),
+            intArrayOf(
+                getPrimaryColor(context, R.attr.colorOnPrimary),     // The color for the Disabled state
+                getPrimaryColor(context, R.attr.colorSecondary)        // The color for the Enabled state
+            )
+        )
+
+        val hintColorList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_activated),  // Disabled
+                intArrayOf(android.R.attr.state_focused)    // Enabled
+            ),
+            intArrayOf(
+                getPrimaryColor(context, R.attr.colorOnPrimary),     // The color for the Disabled state
+                getPrimaryColor(context, R.attr.colorOnPrimary)        // The color for the Enabled state
+            )
+        )
+//
+        binding.textFieldLayout.setBoxStrokeColorStateList(colorList)
+        binding.textFieldLayout.counterTextColor = hintColorList
+        binding.textFieldLayout.hintTextColor = colorList
+
         observeHabitGoal()
         addHabitGoalsClickListeners()
 
