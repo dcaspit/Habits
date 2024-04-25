@@ -349,8 +349,19 @@ class AddFragment : Fragment() {
         if (backgroundTintList == ColorStateList.valueOf(getPrimaryColor(context))) {
             turnOn()
             mAddViewModel.addRepeatDaily(repeatDailyIn)
+            // if repeat daily in full of all items
+            if(mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.MORNING) == true &&
+                mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.AFTERNOON) == true &&
+                mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.EVENING) == true){
+                mAddViewModel.setRepeatDailys(mutableSetOf(RepeatDailyIn.ANYTIME))
+                binding.repeatDailyInCheckbox.isChecked = true
+            }
         } else {
             turnOff()
+            if(mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.ANYTIME) == true){
+                mAddViewModel.removeRepeatDaily(RepeatDailyIn.ANYTIME)
+                binding.repeatDailyInCheckbox.isChecked = false
+            }
             mAddViewModel.removeRepeatDaily(repeatDailyIn)
         }
     }

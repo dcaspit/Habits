@@ -25,7 +25,8 @@ private val POST_NOTIFICATIONS_PERMISSION_REQUEST_CODE = 1
 
 class MainActivity: AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+    private var _binding: ActivityMainBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var navController: NavController
 
@@ -34,7 +35,7 @@ class MainActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.elevation = 0f
