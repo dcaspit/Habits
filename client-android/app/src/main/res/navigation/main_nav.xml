@@ -39,10 +39,17 @@
         <argument
             android:name="repeatDailyIn"
             app:argType="string" />
+        <action
+            android:id="@+id/action_habitDetails_to_addFragment"
+            app:destination="@id/addFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.habits.fragments.add.AddFragment"
         android:label="New Habit"
-        tools:layout="@layout/fragment_add"/>
+        tools:layout="@layout/fragment_add">
+        <argument
+            android:name="habitId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

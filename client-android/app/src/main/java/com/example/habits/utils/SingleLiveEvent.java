@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
-    private static final String TAG = "SingleLiveEvent";
+    private static final java.lang.String TAG = "SingleLiveEvent";
 
     private final AtomicBoolean mPending = new AtomicBoolean(false);
 

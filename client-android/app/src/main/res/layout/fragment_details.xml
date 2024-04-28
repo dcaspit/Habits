@@ -189,19 +189,28 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:gravity="bottom"
+        android:orientation="vertical"
         android:layout_weight="1">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_update"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            app:backgroundTint="?colorPrimary"
+            android:text="Update"
+            app:layout_constraintTop_toBottomOf="@id/divder_3" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_add"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_gravity="bottom"
             app:backgroundTint="?colorPrimary"
             android:text="Delete"
             app:layout_constraintTop_toBottomOf="@id/divder_3" />
-    </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

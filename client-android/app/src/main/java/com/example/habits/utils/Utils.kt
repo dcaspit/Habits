@@ -68,12 +68,12 @@ fun Fragment.addStatusBarColorUpdate(@ColorRes colorRes: Int) {
     )
 }
 
-fun localDateToString(localDate: LocalDate, format: String = "yyyy-MM-dd"): String {
+fun localDateToString(localDate: LocalDate, format: kotlin.String = "yyyy-MM-dd"): kotlin.String {
     val formatter = DateTimeFormatter.ofPattern(format)
     return localDate.format(formatter)
 }
 
-fun stringToLocalDate(dateString: String, format: String = "yyyy-MM-dd"): LocalDate {
+fun stringToLocalDate(dateString: kotlin.String, format: kotlin.String = "yyyy-MM-dd"): LocalDate {
     val formatter = DateTimeFormatter.ofPattern(format)
     return try {
         LocalDate.parse(dateString, formatter)
@@ -88,16 +88,16 @@ fun getPrimaryColor(context: Context?, @AttrRes attrRes: Int = R.attr.colorPrima
     return typedValue.data
 }
 
-fun YearMonth.displayText(short: Boolean = false): String {
+fun YearMonth.displayText(short: Boolean = false): kotlin.String {
     return "${this.month.displayText(short = short)} ${this.year}"
 }
 
-fun Month.displayText(short: Boolean = true): String {
+fun Month.displayText(short: Boolean = true): kotlin.String {
     val style = if (short) TextStyle.SHORT else TextStyle.FULL
     return getDisplayName(style, Locale.ENGLISH)
 }
 
-fun DayOfWeek.displayText(uppercase: Boolean = false): String {
+fun DayOfWeek.displayText(uppercase: Boolean = false): kotlin.String {
     return getDisplayName(TextStyle.SHORT, Locale.ENGLISH).let { value ->
         if (uppercase) value.uppercase(Locale.ENGLISH) else value
     }
@@ -112,7 +112,7 @@ fun Context.findActivity(): Activity {
     throw IllegalStateException("no activity")
 }
 
-fun getWeekPageTitle(week: Week): String {
+fun getWeekPageTitle(week: Week): kotlin.String {
     val firstDate = week.days.first().date
     val lastDate = week.days.last().date
     return when {

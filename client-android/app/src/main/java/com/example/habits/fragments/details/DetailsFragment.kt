@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.habits.R
 import com.example.habits.data.models.HabitAction
@@ -15,6 +16,7 @@ import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentDetailsBinding
 import com.example.habits.fragments.add.HabitGoal
 import com.example.habits.fragments.add.RepeatDailyIn
+import com.example.habits.fragments.home.HomeFragmentDirections
 import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
 import com.example.habits.utils.makeVisible
@@ -58,6 +60,11 @@ class DetailsFragment: Fragment() {
             setHabitProgressBar(habit, action, args.repeatDailyIn)
         }
         mDatabaseViewModel.getHabitById(args.habitId)
+
+        binding.buttonUpdate.setOnClickListener {
+            val action = DetailsFragmentDirections.actionHabitDetailsToAddFragment(args.habitId)
+            binding.root.findNavController().navigate(action)
+        }
 
         observeTrackContainer()
         return binding.root

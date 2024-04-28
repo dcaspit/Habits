@@ -4,6 +4,8 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
@@ -22,6 +25,7 @@ import com.example.habits.data.models.HabitData
 import com.example.habits.data.notifcations.NotifyWorker
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
+import com.example.habits.fragments.details.DetailsFragmentArgs
 import com.example.habits.utils.getPrimaryColor
 import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
@@ -42,6 +46,8 @@ enum class RepeatDailyIn {
 class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
     private val mAddViewModel: AddViewModel by viewModels()
+
+    private val args : AddFragmentArgs by navArgs()
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
@@ -65,6 +71,49 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
     ): View {
         _binding = FragmentAddBinding.inflate(layoutInflater, container, false)
 
+        val habitId = args.habitId
+
+        if(habitId != -1) {
+            mDatabaseViewModel.habit.observe(viewLifecycleOwner) {
+                val (habitData, list) = it
+                binding.textFieldName.text = SpannableStringBuilder(habitData.name)
+            }
+            mDatabaseViewModel.getHabitById(habitId)
+        }
+
+        setTextInputLayoutStyle()
+
+        observeHabitGoal()
+        addHabitGoalsClickListeners()
+
+        observeDays()
+        addDaysClickListeners()
+
+        observeRepeatDailys()
+        addRepeatDailysClickListeners()
+
+        mAddViewModel.openTimePickerEvent.observe(viewLifecycleOwner) { time ->
+            TimePickerDialog(
+                binding.root.context,
+                R.style.Pickers,
+                this@AddFragment,
+                time.hour,
+                time.minute,
+                false
+            ).show()
+        }
+
+
+        binding.tvNotification.setOnClickListener {
+            val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
+            WorkManager.getInstance(binding.root.context).enqueue(notificationRequest)
+        }
+
+        setAddButtonClickListener()
+        return binding.root
+    }
+
+    private fun setTextInputLayoutStyle() {
         val colorList = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_activated),  // Disabled
@@ -98,7 +147,7 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
                 )        // The color for the Enabled state
             )
         )
-//
+        //
         binding.textFieldLayout.setBoxStrokeColorStateList(colorList)
         binding.textFieldLayout.counterTextColor = hintColorList
         binding.textFieldLayout.hintTextColor = colorList
@@ -106,35 +155,6 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
         binding.textFieldLayoutGoalForHabit.setBoxStrokeColorStateList(colorList)
         binding.textFieldLayoutGoalForHabit.counterTextColor = hintColorList
         binding.textFieldLayoutGoalForHabit.hintTextColor = colorList
-
-        observeHabitGoal()
-        addHabitGoalsClickListeners()
-
-        observeDays()
-        addDaysClickListeners()
-
-        observeRepeatDailys()
-        addRepeatDailysClickListeners()
-
-        mAddViewModel.openTimePickerEvent.observe(viewLifecycleOwner, Observer { time ->
-            TimePickerDialog(
-                binding.root.context,
-                R.style.Pickers,
-                this@AddFragment,
-                time.hour,
-                time.minute,
-                false
-            ).show()
-        })
-
-
-        binding.tvNotification.setOnClickListener {
-            val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
-            WorkManager.getInstance(binding.root.context).enqueue(notificationRequest)
-        }
-
-        setAddButtonClickListener()
-        return binding.root
     }
 
 
@@ -233,7 +253,7 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
                     binding.textFieldName.text.toString(),
                     "",
                     "daily",
-                    localDateToString(LocalDate.now()),
+                    localDateToString(LocalDate.now()).toString(),
                     null,
                     days.toString(),
                     habitGoal.toString(),

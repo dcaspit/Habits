@@ -58,7 +58,6 @@ class HomeFragment : Fragment() {
             _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
             //binding.lifecycleOwner = viewLifecycleOwner
 
-
             binding.customBottomBar.inflateMenu(R.menu.bottom_nav_menu)
 
             setupRecyclerView()
@@ -66,7 +65,7 @@ class HomeFragment : Fragment() {
             mDatabaseViewModel.getAllHabits()
 
             binding.floatingActionButton.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomePageToAddFragment()
+                val action = HomeFragmentDirections.actionHomePageToAddFragment(-1)
                 binding.root.findNavController().navigate(action)
             }
 
