@@ -4,10 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habits.utils.SingleLiveEvent
+import com.example.habits.utils.ViewString
 import kotlinx.coroutines.launch
+import java.sql.Time
 import java.time.DayOfWeek
 
 class AddViewModel : ViewModel() {
+    private val _openTimePickerEvent = SingleLiveEvent<Time>()
+    val openTimePickerEvent: LiveData<Time> = _openTimePickerEvent
+
+    data class Time(val hour: Int, val minute: Int)
+    data class Date(val year: Int, val month: Int, val day: Int)
+
+    data class DateState(
+        val time: ViewString,
+        val date: ViewString,
+    )
+
+
     private var _canSave = MutableLiveData(false)
     val canSave: LiveData<Boolean>
         get() = _canSave

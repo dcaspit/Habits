@@ -9,5 +9,9 @@
         <item name="android:textColor">?colorOnPrimary</item>
     </style>
 
+    <style name="Pickers" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">?colorSecondary</item>
+    </style>
+
 
 </resources>

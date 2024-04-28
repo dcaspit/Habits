@@ -33,3 +33,37 @@ data class HabitAction(
     @ColumnInfo(name = "partial_amount") val partialAmount: Int,
     @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "habit_action_id") val id: Int? = null,
 ): Parcelable
+
+@Entity(tableName = "habits_reminder")
+@Parcelize
+data class ReminderEntity(
+    /**
+     * The unique id of the Reminder.
+     */
+    @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "reminder_id") val id: Int? = null,
+
+    /**
+     * The Reminder's title.
+     */
+    @ColumnInfo(name = "reminder_title") var title: String,
+
+    /**
+     * The Reminder's body content.
+     */
+    @ColumnInfo(name = "reminder_body_content") var body: String,
+    /**
+     * The Reminder's time in millis.
+     */
+    @ColumnInfo(name = "reminder_time") var time: Long,
+
+    /**
+     * The id of the [ShowNotificationJob] responsible for displaying an Android notification for this Reminder.
+     */
+    @ColumnInfo(name = "reminder_external_id") var externalId: Int,
+
+    /**
+     * The id of the Android notification that was displayed to the user for this Reminder. If this field
+     * equals 0 a notification has not yet been shown for this Reminder.
+     */
+    @ColumnInfo(name = "notification_id") var notificationId: Int
+): Parcelable

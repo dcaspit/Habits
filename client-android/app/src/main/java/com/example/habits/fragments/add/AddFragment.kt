@@ -1,13 +1,18 @@
 package com.example.habits.fragments.add
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -34,7 +39,7 @@ enum class RepeatDailyIn {
     MORNING, AFTERNOON, EVENING, ANYTIME
 }
 
-class AddFragment : Fragment() {
+class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
     private val mDatabaseViewModel: DatabaseViewModel by viewModels()
     private val mAddViewModel: AddViewModel by viewModels()
 
@@ -66,8 +71,14 @@ class AddFragment : Fragment() {
                 intArrayOf(android.R.attr.state_focused)    // Enabled
             ),
             intArrayOf(
-                getPrimaryColor(context, R.attr.colorOnPrimary),     // The color for the Disabled state
-                getPrimaryColor(context, R.attr.colorSecondary)        // The color for the Enabled state
+                getPrimaryColor(
+                    context,
+                    R.attr.colorOnPrimary
+                ),     // The color for the Disabled state
+                getPrimaryColor(
+                    context,
+                    R.attr.colorSecondary
+                )        // The color for the Enabled state
             )
         )
 
@@ -77,14 +88,24 @@ class AddFragment : Fragment() {
                 intArrayOf(android.R.attr.state_focused)    // Enabled
             ),
             intArrayOf(
-                getPrimaryColor(context, R.attr.colorOnPrimary),     // The color for the Disabled state
-                getPrimaryColor(context, R.attr.colorOnPrimary)        // The color for the Enabled state
+                getPrimaryColor(
+                    context,
+                    R.attr.colorOnPrimary
+                ),     // The color for the Disabled state
+                getPrimaryColor(
+                    context,
+                    R.attr.colorOnPrimary
+                )        // The color for the Enabled state
             )
         )
 //
         binding.textFieldLayout.setBoxStrokeColorStateList(colorList)
         binding.textFieldLayout.counterTextColor = hintColorList
         binding.textFieldLayout.hintTextColor = colorList
+
+        binding.textFieldLayoutGoalForHabit.setBoxStrokeColorStateList(colorList)
+        binding.textFieldLayoutGoalForHabit.counterTextColor = hintColorList
+        binding.textFieldLayoutGoalForHabit.hintTextColor = colorList
 
         observeHabitGoal()
         addHabitGoalsClickListeners()
@@ -95,6 +116,18 @@ class AddFragment : Fragment() {
         observeRepeatDailys()
         addRepeatDailysClickListeners()
 
+        mAddViewModel.openTimePickerEvent.observe(viewLifecycleOwner, Observer { time ->
+            TimePickerDialog(
+                binding.root.context,
+                R.style.Pickers,
+                this@AddFragment,
+                time.hour,
+                time.minute,
+                false
+            ).show()
+        })
+
+
         binding.tvNotification.setOnClickListener {
             val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
             WorkManager.getInstance(binding.root.context).enqueue(notificationRequest)
@@ -102,6 +135,11 @@ class AddFragment : Fragment() {
 
         setAddButtonClickListener()
         return binding.root
+    }
+
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        TODO("Not yet implemented")
     }
 
     private fun addHabitGoalsClickListeners() {
@@ -163,21 +201,24 @@ class AddFragment : Fragment() {
             }
 
             val habitGoal = StringBuilder()
-            when(mAddViewModel.habitGoal.value) {
+            when (mAddViewModel.habitGoal.value) {
                 HabitGoal.NONE -> {
                     habitGoal.append(HabitGoal.NONE.ordinal.toString())
                     habitGoal.append(",")
                 }
+
                 HabitGoal.NUMERIC -> {
                     habitGoal.append(HabitGoal.NUMERIC.ordinal.toString())
                     habitGoal.append(",")
                     habitGoal.append(binding.textFieldGoalForHabit.text)
                 }
+
                 HabitGoal.DURATION -> {
                     habitGoal.append(HabitGoal.DURATION.ordinal.toString())
                     habitGoal.append(",")
                     habitGoal.append(binding.textFieldGoalForHabit.text)
                 }
+
                 null -> {}
             }
 
@@ -281,6 +322,7 @@ class AddFragment : Fragment() {
                     RepeatDailyIn.EVENING -> {
                         binding.evening.turnOn()
                     }
+
                     RepeatDailyIn.ANYTIME -> {
                         binding.morning.turnOn()
                         binding.afternoon.turnOn()
@@ -350,15 +392,16 @@ class AddFragment : Fragment() {
             turnOn()
             mAddViewModel.addRepeatDaily(repeatDailyIn)
             // if repeat daily in full of all items
-            if(mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.MORNING) == true &&
+            if (mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.MORNING) == true &&
                 mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.AFTERNOON) == true &&
-                mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.EVENING) == true){
+                mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.EVENING) == true
+            ) {
                 mAddViewModel.setRepeatDailys(mutableSetOf(RepeatDailyIn.ANYTIME))
                 binding.repeatDailyInCheckbox.isChecked = true
             }
         } else {
             turnOff()
-            if(mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.ANYTIME) == true){
+            if (mAddViewModel.repeatDailyIn.value?.contains(RepeatDailyIn.ANYTIME) == true) {
                 mAddViewModel.removeRepeatDaily(RepeatDailyIn.ANYTIME)
                 binding.repeatDailyInCheckbox.isChecked = false
             }
@@ -370,8 +413,29 @@ class AddFragment : Fragment() {
         if (backgroundTintList == ColorStateList.valueOf(getPrimaryColor(context))) {
             turnOn()
             mAddViewModel.addDay(dayOfWeek)
+
+            if (mAddViewModel.days.value?.contains(DayOfWeek.SUNDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.MONDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.TUESDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.WEDNESDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.THURSDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.FRIDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.SATURDAY) == true
+            ) {
+                binding.repeatEveryDayCheckbox.isChecked = true
+            }
         } else {
             turnOff()
+            if (mAddViewModel.days.value?.contains(DayOfWeek.SUNDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.MONDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.TUESDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.WEDNESDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.THURSDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.FRIDAY) == true &&
+                mAddViewModel.days.value?.contains(DayOfWeek.SATURDAY) == true
+            ) {
+                binding.repeatEveryDayCheckbox.isChecked = false
+            }
             mAddViewModel.removeDay(dayOfWeek)
         }
     }
@@ -388,4 +452,6 @@ class AddFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
