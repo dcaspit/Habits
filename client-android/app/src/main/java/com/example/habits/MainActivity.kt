@@ -40,46 +40,14 @@ class MainActivity: AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.elevation = 0f
 
-        // Create required notification channel on Android 8.0+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_NOTIFICATIONS,
-                "Notifications",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
         // Check if the VIBRATE permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // Request the permission
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), POST_NOTIFICATIONS_PERMISSION_REQUEST_CODE)
         }
 
-//        with(NotificationManagerCompat.from(binding.root.context)) {
-//            if (ActivityCompat.checkSelfPermission(
-//                    this@MainActivity,
-//                    Manifest.permission.POST_NOTIFICATIONS
-//                ) != PackageManager.PERMISSION_GRANTED
-//            ) {
-//                // TODO: Consider calling
-//                // ActivityCompat#requestPermissions
-//                // here to request the missing permissions, and then overriding
-//                // public fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>,
-//                //                                        grantResults: IntArray)
-//                // to handle the case where the user grants the permission. See the documentation
-//                // for ActivityCompat#requestPermissions for more details.
-//                ActivityCompat.requestPermissions(this@MainActivity, Manifest.permission.POST_NOTIFICATIONS, )
-//                return@with
-//            }
-//            // notificationId is a unique int for each notification that you must define.
-//        }
-
-
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        //setupActionBarWithNavController(navController)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {

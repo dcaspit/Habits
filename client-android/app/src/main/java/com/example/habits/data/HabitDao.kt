@@ -9,6 +9,8 @@ import androidx.room.Query
 import androidx.room.Update
 import com.example.habits.data.models.HabitAction
 import com.example.habits.data.models.HabitData
+import com.example.habits.data.models.Reminder
+import com.example.habits.data.models.ReminderEntity
 
 @Dao
 interface HabitDao {
@@ -17,7 +19,7 @@ interface HabitDao {
     fun getAllHabits(): List<HabitData>
 
     @Query("SELECT * FROM habits_table WHERE habit_id = :habitId")
-    fun getHabit(habitId: Int): HabitData
+    fun getHabit(habitId: String): HabitData
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHabit(habitData: HabitData)
@@ -29,7 +31,7 @@ interface HabitDao {
     fun deleteHabit(habitData: HabitData)
 
     @Query("SELECT * FROM habits_actions_table WHERE habit_id = :habitId ")
-    fun getHabitActions(habitId: Int): List<HabitAction>
+    fun getHabitActions(habitId: String): List<HabitAction>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHabitAction(habit: HabitAction)
@@ -38,6 +40,18 @@ interface HabitDao {
     fun updateHabitAction(habit: HabitAction)
 
     @Delete
-    fun deleteHabit(habit: HabitAction)
+    fun deleteHabitAction(habit: HabitAction)
+
+    @Query("SELECT * FROM habits_reminder WHERE habit_id = :habitId ")
+    fun getHabitReminders(habitId: String): List<ReminderEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertHabitReminder(reminder: ReminderEntity)
+
+    @Update
+    fun updateHabitReminder(reminder: ReminderEntity)
+
+    @Delete
+    fun deleteHabitReminder(reminder: ReminderEntity)
 
 }

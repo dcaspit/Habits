@@ -34,7 +34,7 @@ class HabitsViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun getHabit(id: Int): HabitData? = _habits.value?.find { habit -> habit.id == id }
+    //fun getHabit(id: Int): HabitData? = _habits.value?.find { habit -> habit.id == id }
 
     companion object {
     }

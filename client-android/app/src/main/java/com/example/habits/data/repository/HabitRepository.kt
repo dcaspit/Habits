@@ -10,7 +10,7 @@ class HabitRepository(private val habitDao: HabitDao) {
         habitDao.insertHabit(habitData)
     }
 
-    fun getHabitById(id: Int) = habitDao.getHabit(id)
+    fun getHabitById(id: String) = habitDao.getHabit(id)
 
     fun updateHabit(habitData: HabitData) {
         habitDao.updateHabit(habitData)

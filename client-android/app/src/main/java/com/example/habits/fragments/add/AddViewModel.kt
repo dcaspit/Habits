@@ -1,18 +1,57 @@
 package com.example.habits.fragments.add
 
+import androidx.constraintlayout.motion.utils.ViewState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habits.data.models.Reminder
+import com.example.habits.data.models.ReminderEntity
 import com.example.habits.utils.SingleLiveEvent
 import com.example.habits.utils.ViewString
+import com.example.habits.utils.isNow
+import com.example.habits.utils.vInteger
+import com.example.habits.utils.vString
 import kotlinx.coroutines.launch
 import java.sql.Time
 import java.time.DayOfWeek
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+
+val Reminder.displayTime: ViewString
+    get() = when {
+        time.isNow() -> vInteger("Now")
+        else -> vString(time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)))
+    }
 
 class AddViewModel : ViewModel() {
+     var reminder = Reminder()
+
+    private var _reminderLiveData = MutableLiveData<ViewString>()
+    val reminderLiveData: LiveData<ViewString>
+        get() = _reminderLiveData
+
+    fun updateReminderTime(hourOfDay: Int, minute: Int) {
+        val newTime = reminder.time
+            .withHour(hourOfDay)
+            .withMinute(minute)
+        reminder = reminder.copy(time = newTime)
+        _reminderLiveData.postValue(reminder.displayTime)
+    }
+
     private val _openTimePickerEvent = SingleLiveEvent<Time>()
     val openTimePickerEvent: LiveData<Time> = _openTimePickerEvent
+
+    fun openTimePicker() {
+        with(reminder.time) {
+            _openTimePickerEvent.postValue(
+                Time(
+                    hour = hour,
+                    minute = minute
+                )
+            )
+        }
+    }
 
     data class Time(val hour: Int, val minute: Int)
     data class Date(val year: Int, val month: Int, val day: Int)

@@ -25,15 +25,23 @@ import com.example.habits.data.models.HabitData
 import com.example.habits.data.notifcations.NotifyWorker
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
+import com.example.habits.databinding.ReminderItemBinding
 import com.example.habits.fragments.details.DetailsFragmentArgs
+import com.example.habits.utils.ViewString
 import com.example.habits.utils.getPrimaryColor
 import com.example.habits.utils.localDateToString
 import com.example.habits.utils.makeGone
 import com.example.habits.utils.makeVisible
+import com.example.habits.utils.millis
+import com.example.habits.utils.vInteger
+import com.example.habits.utils.vString
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 
 enum class HabitGoal {
     NONE, NUMERIC, DURATION
@@ -73,7 +81,7 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
 
         val habitId = args.habitId
 
-        if(habitId != -1) {
+        if(habitId.isNotEmpty()) {
             mDatabaseViewModel.habit.observe(viewLifecycleOwner) {
                 val (habitData, list) = it
                 binding.textFieldName.text = SpannableStringBuilder(habitData.name)
@@ -92,6 +100,15 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
         observeRepeatDailys()
         addRepeatDailysClickListeners()
 
+        mAddViewModel.reminderLiveData.observe(viewLifecycleOwner) { state ->
+            val reminderBinding = ReminderItemBinding.inflate(layoutInflater, container, false)
+            when (state) {
+                is vInteger -> reminderBinding.reminderText.text = state.value
+                is vString -> reminderBinding.reminderText.text = state.value
+            }
+            binding.remindersContainer.addView(reminderBinding.root)
+        }
+
         mAddViewModel.openTimePickerEvent.observe(viewLifecycleOwner) { time ->
             TimePickerDialog(
                 binding.root.context,
@@ -105,8 +122,10 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
 
 
         binding.tvNotification.setOnClickListener {
-            val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
-            WorkManager.getInstance(binding.root.context).enqueue(notificationRequest)
+            mAddViewModel.openTimePicker()
+
+//            val notificationRequest: WorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
+//            WorkManager.getInstance(binding.root.context).enqueue(notificationRequest)
         }
 
         setAddButtonClickListener()
@@ -159,7 +178,22 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
 
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        TODO("Not yet implemented")
+        mAddViewModel.updateReminderTime(hourOfDay, minute)
+
+        val newTime = LocalDateTime.now()
+            .withHour(hourOfDay)
+            .withMinute(minute).millis
+
+        val now = System.currentTimeMillis()
+
+        val workManager = WorkManager.getInstance(binding.root.context)
+        val workRequest = OneTimeWorkRequestBuilder<NotifyWorker>().build()
+
+        val myWorkRequest = OneTimeWorkRequestBuilder<NotifyWorker>()
+            .setInitialDelay((newTime - now), TimeUnit.MILLISECONDS)
+            .build()
+
+        workManager.enqueue(myWorkRequest)
     }
 
     private fun addHabitGoalsClickListeners() {
@@ -248,18 +282,30 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
                 repeatDailyIn.append(",")
             }
 
-            mDatabaseViewModel.insertHabit(
-                HabitData(
-                    binding.textFieldName.text.toString(),
-                    "",
-                    "daily",
-                    localDateToString(LocalDate.now()).toString(),
-                    null,
-                    days.toString(),
-                    habitGoal.toString(),
-                    repeatDailyIn.toString()
-                )
+            val habitData = HabitData(
+                binding.textFieldName.text.toString(),
+                "",
+                "daily",
+                localDateToString(LocalDate.now()).toString(),
+                null,
+                days.toString(),
+                habitGoal.toString(),
+                repeatDailyIn.toString(),
+                UUID.randomUUID().toString()
             )
+            mDatabaseViewModel.insertHabit(
+                habitData
+            )
+
+//            if(habitData.id != null) {
+//                val newTime = mAddViewModel.reminder.time
+//                    .withSecond(0)
+//                    .withNano(0)
+//                mAddViewModel.reminder = mAddViewModel.reminder.copy(time = newTime, habitId = habitData.id)
+//
+//                mDatabaseViewModel.insertReminder(mAddViewModel.reminder)
+//            }
+
             findNavController().popBackStack()
         }
     }

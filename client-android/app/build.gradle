@@ -96,5 +96,6 @@ dependencies {
 
     // The view calendar library
     implementation 'com.kizitonwose.calendar:view:2.5.0'
+    implementation 'com.evernote:android-job:1.4.3'
 
 }

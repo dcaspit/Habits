@@ -17,15 +17,14 @@ data class HabitData(
     @ColumnInfo(name = "track_days") val trackDays: String,
     @ColumnInfo(name = "habit_type") val habitType: String, // String will in format of: "type,count". examples: "0" "1,50" "2,20". types: "0"=NONE, "1"=NUMERIC, "2"=DURATION
     @ColumnInfo(name = "repeat_daily_in") val repeatDailyIn: String,
-    @ColumnInfo(name = "reminder") val reminder: String? = null,
-    @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "habit_id") val id: Int? = null,
+    @PrimaryKey@ColumnInfo(name = "habit_id") val id: String,
 ): Parcelable
 
 
 @Entity(tableName = "habits_actions_table")
 @Parcelize
 data class HabitAction(
-    @ColumnInfo(name = "habit_id") val habitId: Int,
+    @ColumnInfo(name = "habit_id") val habitId: String,
     @ColumnInfo(name = "selected_date") val selectedDate: String,
     @ColumnInfo(name = "habit_type") val habitType: String,
     @ColumnInfo(name = "repeat_daily_in") val repeatDailyIn: String,
@@ -37,6 +36,7 @@ data class HabitAction(
 @Entity(tableName = "habits_reminder")
 @Parcelize
 data class ReminderEntity(
+    @ColumnInfo(name = "habit_id") val habitId: String,
     /**
      * The unique id of the Reminder.
      */

@@ -65,7 +65,7 @@ class HomeFragment : Fragment() {
             mDatabaseViewModel.getAllHabits()
 
             binding.floatingActionButton.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomePageToAddFragment(-1)
+                val action = HomeFragmentDirections.actionHomePageToAddFragment("")
                 binding.root.findNavController().navigate(action)
             }
 

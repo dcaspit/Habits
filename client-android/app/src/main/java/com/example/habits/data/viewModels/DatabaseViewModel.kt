@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.habits.data.HabitsDatabase
 import com.example.habits.data.models.HabitAction
 import com.example.habits.data.models.HabitData
+import com.example.habits.data.models.Reminder
 import com.example.habits.data.repository.HabitRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -44,7 +45,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun getHabitById(id: Int) {
+    fun getHabitById(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val habit = repository.getHabitById(id)
             val habitActions = getHabitActions(id)
@@ -59,7 +60,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun getHabitActions(habitId: Int): List<HabitAction> {
+    fun getHabitActions(habitId: String): List<HabitAction> {
         return habitDao.getHabitActions(habitId)
     }
 
