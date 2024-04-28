@@ -1,7 +1,12 @@
 package com.example.habits.fragments.add
 
+import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
@@ -12,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -22,7 +28,11 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.example.habits.R
 import com.example.habits.data.models.HabitData
+import com.example.habits.data.notifcations.Notification
 import com.example.habits.data.notifcations.NotifyWorker
+import com.example.habits.data.notifcations.messageExtra
+import com.example.habits.data.notifcations.notificationID
+import com.example.habits.data.notifcations.titleExtra
 import com.example.habits.data.viewModels.DatabaseViewModel
 import com.example.habits.databinding.FragmentAddBinding
 import com.example.habits.databinding.ReminderItemBinding
@@ -297,17 +307,48 @@ class AddFragment : Fragment(),  TimePickerDialog.OnTimeSetListener {
                 habitData
             )
 
-//            if(habitData.id != null) {
-//                val newTime = mAddViewModel.reminder.time
-//                    .withSecond(0)
-//                    .withNano(0)
+            scheduleNotification()
+
+            //if(habitData.id != null) {
+
 //                mAddViewModel.reminder = mAddViewModel.reminder.copy(time = newTime, habitId = habitData.id)
 //
 //                mDatabaseViewModel.insertReminder(mAddViewModel.reminder)
-//            }
+            //}
 
             findNavController().popBackStack()
         }
+    }
+
+    @SuppressLint("ScheduleExactAlarm")
+    private fun scheduleNotification() {
+        // Create an intent for the Notification BroadcastReceiver
+        val intent = Intent(context, Notification::class.java)
+
+        // Create a PendingIntent for the broadcast
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            notificationID,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        // Get the AlarmManager service
+        val alarmManager = getSystemService(binding.root.context, AlarmManager::class.java) as AlarmManager
+
+        // Get the selected time and schedule the notification
+        val newTime = mAddViewModel.reminder.time
+            .withSecond(0)
+            .withNano(0).millis
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            newTime,
+            pendingIntent
+        )
+
+        // Show an alert dialog with information
+        // about the scheduled notification
     }
 
     private fun addDaysClickListeners() {

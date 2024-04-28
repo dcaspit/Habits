@@ -17,10 +17,12 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.habits.data.notifcations.NotifyWorker
 import com.example.habits.databinding.ActivityMainBinding
 
 const val CHANNEL_NOTIFICATIONS = "channel_notifications"
 private val POST_NOTIFICATIONS_PERMISSION_REQUEST_CODE = 1
+private val POST_SCHEDULE_ALARM_PERMISSION_REQUEST_CODE = 2
 
 
 class MainActivity: AppCompatActivity() {
@@ -32,7 +34,6 @@ class MainActivity: AppCompatActivity() {
 
     private val notificationManager: NotificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,10 +41,17 @@ class MainActivity: AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.elevation = 0f
 
+
+        createNotificationChannel()
         // Check if the VIBRATE permission is granted
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // Request the permission
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), POST_NOTIFICATIONS_PERMISSION_REQUEST_CODE)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.SCHEDULE_EXACT_ALARM), POST_SCHEDULE_ALARM_PERMISSION_REQUEST_CODE)
         }
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -57,6 +65,28 @@ class MainActivity: AppCompatActivity() {
                 // VIBRATE permission granted
             } else {
                 // VIBRATE permission denied
+            }
+        }
+
+        if (requestCode == POST_SCHEDULE_ALARM_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // VIBRATE permission granted
+
+            } else {
+                // VIBRATE permission denied
+            }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = notificationManager?.getNotificationChannel(NotifyWorker.CHANNEL_ID)
+            if (notificationChannel == null) {
+                notificationManager?.createNotificationChannel(
+                    NotificationChannel(
+                        NotifyWorker.CHANNEL_ID, NotifyWorker.TAG, NotificationManager.IMPORTANCE_LOW
+                    )
+                )
             }
         }
     }
